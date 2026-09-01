@@ -7,6 +7,13 @@
     <language>es</language>
     <atom:link href="https://jorgebd21.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Micro-SaaS Autónomos con n8n y Serverless Postgres: Guía de Arquitectura a Coste Cero en 2026</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_093154_micro-saas_autnomos_con_n8n_y_serverles.html</link>
+      <description>Montar el backend para una aplicación web productiva requería tradicionalmente aprovisionar instancias dedicadas, configurar balanceadores de carga y pagar suscripciones mensuales por bases de datos gestionadas. Hoy en día, la madurez de los agentes autónomos nativos en n8n combinada con las capas gratuitas de PostgreSQL *serverless* permite construir backend asíncronos completos sin incurrir en costes fijos.</description>
+      <category>Infraestructura &amp; DevOps</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_093154_micro-saas_autnomos_con_n8n_y_serverles.html</guid>
+    </item>
+    <item>
       <title>Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma</title>
       <link>https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.html</link>
       <description>El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activas de herramientas de diseño para colaboradores externos que terminaron su contrato, una suscripción redundante a un LLM comercial y dos dominios en renovación automática que no resolvían ningún registro DNS. En total: 412 euros al mes desperdiciados en micro-pagos invisibles.</description>
