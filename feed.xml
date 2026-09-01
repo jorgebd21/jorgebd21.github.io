@@ -7,6 +7,13 @@
     <language>es</language>
     <atom:link href="https://jorgebd21.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.html</link>
+      <description>Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser el mismo: una morgue digital con miles de archivos Markdown que jamás vuelves a leer. En 2026, acumular información de forma pasiva ha dejado de ser una ventaja competitiva para convertirse en una deuda de mantenimiento infraestructural.</description>
+      <category>Inteligencia Artificial</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.html</guid>
+    </item>
+    <item>
       <title>Adiós a la Nube: Cómo Desplegar DeepSeek-V4 y Agentes Locales para Eliminar tus Suscripciones de IA</title>
       <link>https://jorgebd21.github.io/post/draft_passed_20260901_092754_adis_a_la_nube_cmo_desplegar_deepseek-.html</link>
       <description>El mes pasado cancelé la última suscripción activa a servicios de LLM comercial en mi equipo de infraestructura. Entre las licencias empresariales de ChatGPT, Claude Pro y el gasto recurrente de API keys para procesar workflows internos, la factura superaba los 420 dólares mensuales por ingeniero. Multiplicado por diez personas, el coste superaba los 50.000 dólares anuales por interactuar con una API cuya latencia depende de servidores externos y cuyas políticas de privacidad obligan a firmar adendas interminables de protección de datos.</description>

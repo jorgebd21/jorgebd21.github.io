@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026</title>
+    <meta name="description" content="Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser el mismo: una morgue digital con miles de archivos Markdown que jamás vuelves a leer. En 2026, acumular información de forma pasiva ha dejado de ser una ventaja competitiva para convertirse en una deuda de mantenimiento infraestructural.">
+    
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026">
+    <meta property="og:description" content="Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser el mismo: una morgue digital con miles de archivos Markdown que jamás vuelves a leer. En 2026, acumular información de forma pasiva ha dejado de ser una ventaja competitiva para convertirse en una deuda de mantenimiento infraestructural.">
+    <meta property="og:url" content="https://jorgebd21.github.io">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect Google Fonts for Editorial Press (Newsreader + Lora + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        body: ['"Lora"', 'Charter', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Editorial Typography & Universal Background Styles -->
+    <style>
+        body {
+            background-color: #0A0B0E;
+            color: #D4D4D8;
+            font-family: 'Lora', Charter, Georgia, serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .font-serif { font-family: 'Newsreader', Georgia, serif; }
+        .font-body { font-family: 'Lora', Charter, Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Universal Editorial Press Background Across ALL Pages */
+        .editorial-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../assets/editorial_bg.jpg'), url('/assets/editorial_bg.jpg'), url('https://jorgebd21.github.io/assets/editorial_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.16;
+            filter: contrast(135%) brightness(105%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .editorial-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(10, 11, 14, 0.35) 0%, rgba(10, 11, 14, 0.80) 65%, #0A0B0E 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Classic Editorial Drop Cap */
+        .editorial-lead::first-letter {
+            font-family: 'Newsreader', Georgia, serif;
+            float: left;
+            font-size: 3.85em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Subtle borders and paper feel */
+        .editorial-box {
+            background-color: rgba(15, 16, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .editorial-divider {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Clean Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0B0E; }
+        ::-webkit-scrollbar-thumb { background: #272A36; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4354; }
+
+        /* Toast animation */
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .toast-animate { animation: toastFade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+
+    <!-- Google AdSense Official Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9111135660504315" crossorigin="anonymous"></script>
+
+    <!-- LLM Autodiscovery & RSS -->
+    <link rel="alternate" type="text/plain" href="https://jorgebd21.github.io/llms.txt" title="LLM Context Index">
+    <link rel="alternate" type="application/rss+xml" href="https://jorgebd21.github.io/feed.xml" title="RSS Feed">
+    
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion",
+            "description": "Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser el mismo: una morgue digital con miles de archivos Markdown que jamás vuelves a leer. En 2026, acumular información de forma pasiva ha dejado de ser una ventaja competitiva para convertirse en una deuda de mantenimiento infraestructural.",
+            "author": { "@type": "Person", "name": "Jorge Baeza" },
+            "publisher": { "@type": "Organization", "name": "SYSARCH • HOMELAB JOURNAL" },
+            "datePublished": "2026-09-01",
+            "mainEntityOfPage": "https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.html",
+            "articleSection": "Inteligencia Artificial",
+            "wordCount": 1443,
+            "inLanguage": "es"
+        }
+        </script>
+        
+</head>
+<body class="bg-[#0A0B0E] text-zinc-300 min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+
+    <!-- Universal Editorial Background Layers -->
+    <div class="editorial-backdrop"></div>
+    <div class="editorial-vignette"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="px-4 py-2.5 rounded-sm editorial-box text-white font-mono text-xs shadow-2xl flex items-center gap-2 border-neutral-700">
+            <span class="text-neutral-400">✓</span>
+            <span id="toastMsg">Copiado al portapapeles</span>
+        </div>
+    </div>
+
+    <!-- Editorial Top Utility Bar -->
+    <div class="border-b border-neutral-800/80 bg-[#08080B]/90 backdrop-blur-md text-neutral-400 font-mono text-[11px] py-1.5 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-neutral-400 font-semibold">SYSARCH LABS</span>
+                <span>•</span>
+                <span class="text-neutral-400">EDICIÓN 2026 // VOL. IV</span>
+                <span>•</span>
+                <span class="text-neutral-500 hidden md:inline">HOMELAB & SISTEMAS AUTÓNOMOS</span>
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1" title="Índice para Modelos de Lenguaje">
+                    <span>λ</span> <span>/llms.txt</span>
+                </a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" target="_blank" class="hover:text-white transition-colors" title="Corpus RAG Completo">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" target="_blank" class="hover:text-white transition-colors">RSS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publication Masthead / Header -->
+    <header class="border-b border-neutral-800 bg-[#0A0B0E]/80 backdrop-blur-md pt-8 pb-6 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <a href="https://jorgebd21.github.io/" class="group">
+                        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.06em] text-white group-hover:text-neutral-300 transition-colors uppercase">
+                            SYSARCH • HOMELAB JOURNAL
+                        </h1>
+                    </a>
+                    <p class="font-mono text-xs uppercase tracking-widest text-neutral-400 mt-1">
+                        Publicación Técnica de Arquitectura de Sistemas, Redes Zero-Trust e IA Local
+                    </p>
+                </div>
+
+                <div class="text-right hidden sm:block font-mono text-xs text-neutral-400 border-l border-neutral-800 pl-6">
+                    <p class="text-white font-semibold">COSTE CERO & ZERO-EXPOSURE</p>
+                    <p class="text-neutral-500 text-[11px] mt-0.5">Airgapped GitOps Publishing</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editorial Layout -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+        
+        <div class="max-w-[68ch] mx-auto">
+            <!-- Journal Navigation -->
+            <div class="flex items-center justify-between gap-4 mb-8 pb-3 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+                <a href="https://jorgebd21.github.io/" class="hover:text-white flex items-center gap-1.5 transition-colors group">
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>Todas las publicaciones</span>
+                </a>
+                
+                <div class="flex items-center gap-3">
+                    <a href="https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.md" target="_blank" class="hover:text-white transition-colors" title="Ver formato Markdown puro">
+                        λ .md raw
+                    </a>
+                    <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.md', 'URL Markdown copiada para IA')" class="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-all cursor-pointer active:scale-95" title="Copiar URL para ChatGPT / Claude">
+                        Copiar para IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Header -->
+            <header class="mb-10 pb-6 border-b-2 border-neutral-800">
+                <div class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                    Inteligencia Artificial // ANÁLISIS TÉCNICO
+                </div>
+
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+                    Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion
+                </h1>
+
+                <p class="font-serif italic text-lg sm:text-xl text-neutral-300 mt-4 leading-relaxed border-l-2 border-neutral-500 pl-4 py-1">Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser...</p>
+
+                <div class="mt-6 pt-4 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-neutral-400">
+                    <div>Por <span class="text-white font-semibold">Jorge Baeza</span></div>
+                    <div>01.09.2026 • 7 min de lectura (1,443 palabras)</div>
+                </div>
+            </header>
+
+            <!-- Google AdSense In-Article Slot -->
+            <div class="my-8 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Article Body (with Drop Cap on lead paragraph) -->
+            <article class="prose prose-invert max-w-none text-neutral-200">
+                <h1 class="font-serif text-3xl sm:text-4xl font-bold text-white mt-12 mb-6 tracking-normal">Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion</h1>
+
+<p class="editorial-lead text-neutral-200 font-body text-[17.5px] sm:text-[18.5px] leading-[1.85] mb-6">Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser el mismo: una morgue digital con miles de archivos Markdown que jamás vuelves a leer. En 2026, acumular información de forma pasiva ha dejado de ser una ventaja competitiva para convertirse en una deuda de mantenimiento infraestructural.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El cambio fundamental de este año no es la integración de otro chat conversacional en la esquina de tu pantalla. La transformación real proviene de los <strong class="text-white font-semibold">Segundos Cerebros Activos</strong>: agentes de Inteligencia Artificial que se ejecutan de forma local en tu hardware, analizan los cambios en tus notas en segundo plano, enlazan conceptos de manera implícita y ejecutan flujos de trabajo sin enviar un solo byte de tus datos a servidores externos.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">1. El fin del PKM pasivo: Por qué la estructura manual colapsó</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Durante una década, la Gestión del Conocimiento Personal (PKM, por sus siglas en inglés) exigía que el usuario actuara como un motor de base de datos humano. Tenías que recordar dónde guardar cada fragmento, qué etiquetas usar y cómo vincular la nota A con la nota B. Este modelo falló por una razón técnica evidente: el coste cognitivo de clasificar la información supera el valor recuperado al consultarla.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">[ PKM PASIVO (2015-2024) ] <br> Captura manual ➔ Clasificación manual ➔ Búsqueda por palabra clave ➔ Olvido estructural</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">[ SEGUNDO CEREBRO ACTIVO (2026) ]<br> Captura en crudo ➔ Ingesta local (Embeddings + Small LLM) ➔ Grafo implícito ➔ Ejecución autónoma</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Un Segundo Cerebro Activo elimina la fase de clasificación manual. Utiliza modelos del lenguaje de tamaño reducido (SLMs de 3B a 14B parámetros) optimizados para hardware de consumo —como los chips Apple Silicon M3/M4, los procesadores Intel Core Ultra o AMD Ryzen serie 9000— que corren permanentemente en local. Estos modelos procesan tu texto no como una colección de documentos aislados, sino como un espacio vectorial dinámico donde el agente actúa cuando detecta patrones o inconsistencias.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">2. Arquitectura de un agente local sin programar</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para construir este entorno no necesitas escribir un pipeline complejo en Python ni desplegar infraestructura pesada. La combinación de <strong class="text-white font-semibold">Ollama</strong> o <strong class="text-white font-semibold">LM Studio</strong> con plugins de integración directa permite desplegar un entorno completamente autónomo en menos de 20 minutos.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Opción A: Obsidian 100% Privado e In-Device</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En Obsidian, toda la inteligencia debe procesarse de manera local a través de la API del bucle de eventos del sistema operativo.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Motor de Inferencia Local</strong>: Instala Ollama en tu máquina y descarga un modelo cuantizado optimizado para embeddings y razonamiento.<br>   bash<br>   ollama pull qwen2.5:7b-instruct-q4_K_M<br>   ollama pull bge-m3<br>   <br>2. <strong class="text-white font-semibold">Plugin de Orquestación</strong>: Configura el plugin comunitario <em class="text-neutral-300 italic font-serif">Smart Connections</em> o <em class="text-neutral-300 italic font-serif">Local GPT Agent</em> en Obsidian.<br>3. <strong class="text-white font-semibold">Conexión de Endpoint</strong>: Selecciona como proveedor <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Custom OpenAI / Ollama</code> apuntando a <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://localhost:11434/v1</code>.<br>4. <strong class="text-white font-semibold">Permisos de Escritura</strong>: Activa el modo "Agentic Write" en notas temporales dentro de una carpeta aislada (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/Inbox/Agent_Output/</code>). Jamás des acceso de escritura ilimitado al agente sobre tu carpeta raíz.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Opción B: Notion Híbrido con n8n Local</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Notion no guarda sus datos localmente de forma nativa en formato llano, pero puedes crear un cortafuegos de privacidad interponiendo un contenedor local de <strong class="text-white font-semibold">n8n</strong> entre la API de Notion y tu motor de IA local.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">yaml<br>version: '3.8'</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">services:<br>  ollama:<br>    image: ollama/ollama:latest<br>    container_name: local_ollama<br>    ports:<br>      - "11434:11434"<br>    volumes:<br>      - ollama_storage:/root/.ollama<br>    restart: unless-stopped</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">n8n:<br>    image: docker.n8n.io/n8nio/n8n:latest<br>    container_name: local_n8n<br>    ports:<br>      - "5678:5678"<br>    environment:<br>      - N8N_HOST=localhost<br>      - N8N_PORT=5678<br>      - N8N_PROTOCOL=http<br>    volumes:<br>      - n8n_data:/home/node/.n8n<br>    depends_on:<br>      - ollama<br>    restart: unless-stopped</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">volumes:<br>  ollama_storage:<br>  n8n_data:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Con esta pila Docker, tu flujo en n8n escucha las modificaciones en las bases de datos de Notion mediante un webhook, envía el texto a procesar a tu instancia local de Ollama a través de la red interna de Docker y devuelve a Notion solo el resultado ya procesado. La información cruda jamás toca los motores de IA en la nube.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">3. Casos de uso prácticos en el trabajo diario</h2>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Automatización de resúmenes de reuniones y extracción de tareas</h3>
+Dejas la transcripción en bruto de una llamada de Audio/Whisper en la carpeta <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/Capturas</code>. El agente detecta el nuevo archivo Markdown, invoca el modelo local <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">qwen2.5:7b</code>, extrae los compromisos clave y los inserta directamente en tu tablero de proyectos con formato de checklist estructurado.
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">markdown<br><!-- Entrada cruda en /Capturas/2026-03-30_reunion.md --><br>"Hablamos con Carlos sobre el despliegue del cluster de Kubernetes. Dice que falta actualizar las reglas de BGP en el firewall antes del viernes. María revisará la base de datos PostgreSQL 16..."</p>
+
+<!-- Salida generada autónomamente por el agente local -->
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+tipo: tarea_extraida
+origen: "2026-03-30_reunion"
+estado: pendiente
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+- [ ] <strong class="text-white font-semibold">Infraestructura</strong>: Actualizar reglas BGP en firewall @Carlos (Vence: Viernes)
+- [ ] <strong class="text-white font-semibold">Base de datos</strong>: Auditoría de parches en PostgreSQL 16 @María
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Síntesis continua de investigación</h3>
+Mientras guardas clips de artículos de investigación o documentación técnica en la bóveda, el motor local realiza una búsqueda de vecindad por coseno (vector search) utilizando la base de datos vectorial local (como LanceDB o Chroma embebido). Cuando detecta que has acumulado más de 5 notas con alta similitud semántica sobre un mismo concepto técnico, crea una "Nota de Síntesis" borrador sugiriendo la conexión entre ellas.
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Priorización contextual de tareas según carga de trabajo</h3>
+En lugar de ordenar tus tareas manualmente por prioridad estática (Alta/Media/Baja), el agente analiza tu agenda del día, el volumen de commits en tu repositorio local y la urgencia de tus notas abiertas para reorganizar dinámicamente tu vista principal de trabajo cada mañana a las 08:00.
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">4. Matriz comparativa de filosofías de gestión del conocimiento</h2>
+
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm">
+<table class="w-full text-left border-collapse text-[13.5px]">
+<thead><tr class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<th class="px-5 py-3 font-semibold">Característica</th>
+<th class="px-5 py-3 font-semibold">PKM Tradicional (2020)</th>
+<th class="px-5 py-3 font-semibold">Búsqueda RAG Básica (2024)</th>
+<th class="px-5 py-3 font-semibold">Agente Autónomo Local (2026)</th>
+</tr></thead><tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Procesamiento</strong></td>
+<td class="px-5 py-3 leading-relaxed">100% Manual por el usuario</td>
+<td class="px-5 py-3 leading-relaxed">Consulta/Respuesta bajo demanda</td>
+<td class="px-5 py-3 leading-relaxed">Ejecución en segundo plano</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Privacidad</strong></td>
+<td class="px-5 py-3 leading-relaxed">Alta (Archivos locales)</td>
+<td class="px-5 py-3 leading-relaxed">Baja/Media (APIs Cloud)</td>
+<td class="px-5 py-3 leading-relaxed">Alta (LLM e Inferencia local)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Mantenimiento</strong></td>
+<td class="px-5 py-3 leading-relaxed">Alto (Etiquetas y enlaces)</td>
+<td class="px-5 py-3 leading-relaxed">Bajo (Sin estructura)</td>
+<td class="px-5 py-3 leading-relaxed">Cero (Estructuración implícita)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Riesgo de Corrupción</strong></td>
+<td class="px-5 py-3 leading-relaxed">Nulo</td>
+<td class="px-5 py-3 leading-relaxed">Nulo (Solo lectura)</td>
+<td class="px-5 py-3 leading-relaxed">Medio (Requiere sandbox)</td>
+</tr>
+</tbody></table></div>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">5. Control de errores, privacidad y prevención del caos por sobre-automatización</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Confiar la modificación de archivos a un modelo probabilístico puede arruinar tu bóveda de conocimiento si no configuras los límites de ejecución adecuados. El mayor peligro en 2026 no es que una IA no entienda tus notas, sino la "alucinación destructiva", donde un agente reescribe o simplifica en exceso una nota compleja eliminando matices técnicos críticos.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Reglas estrictas de aislamiento (Sandboxing)</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Principio de Inmutabilidad de notas originales</strong>: El agente nunca debe modificar el texto original introducido por el usuario. Su trabajo debe limitarse a añadir metadatos en el bloque <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">YAML frontmatter</code> o escribir en archivos completamente nuevos dentro de directorios de salida dedicados (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/Agente/Outputs/</code>).<br>2. <strong class="text-white font-semibold">Límite de Contexto y Tokenización</strong>: Ajusta el parámetro <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">num_ctx</code> en Ollama a un valor acorde a tu memoria RAM. Un valor de <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">8192</code> es suficiente para notas individuales. Forzar contextos de <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">32k</code> en modelos de 7B sin la aceleración de hardware adecuada provocará caídas en el demonio del sistema.<br>3. <strong class="text-white font-semibold">Retención estricta en local</strong>: Para asegurar que ningún dato escapa de tu red, añade reglas a nivel de cortafuegos de aplicación (como Little Snitch en macOS o ufw/iptables en Linux) para bloquear el tráfico saliente de las aplicaciones de inferencia local.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">bash<br><h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Ejemplo de regla UFW en Linux para aislar la IP local del motor de inferencia</h2><br>sudo ufw deny out from any to any port 11434</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Recomendaciones Prácticas y Siguientes Pasos</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para evolucionar tu sistema de notas sin destruir tu flujo de trabajo actual, sigue este orden de despliegue gradual:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Audita tu Hardware</strong>: Asegúrate de contar con al menos 16 GB de RAM unificada (en Apple Silicon) o una GPU dedicada con un mínimo de 8 GB de VRAM (en entornos Windows/Linux).<br>2. <strong class="text-white font-semibold">Instala la pila base local</strong>: Despliega Ollama y descarga los modelos <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">bge-m3</code> (para indexación vectorial) y <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">qwen2.5:7b-instruct</code> (para razonamiento y modificación de texto).<br>3. <strong class="text-white font-semibold">Crea una carpeta Sandbox</strong>: En Obsidian o Notion, define un directorio aislado llamado <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">_Inbox_Agent</code>. Ninguna automatización debe tocar tus notas consolidadas durante los primeros 14 días de prueba.<br>4. <strong class="text-white font-semibold">Implementa un solo flujo de trabajo</strong>: Empieza automatizando únicamente la extracción de tareas a partir de notas de reunión crudas. Evalúa la precisión del modelo local antes de otorgarle permisos de enlace vectorial entre documentos.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El objetivo de un Segundo Cerebro en 2026 no es delegar el pensamiento crítico en una máquina, sino eliminar por completo la burocracia digital de organizar lo que aprendes.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<div class="mt-12 pt-4 border-t border-neutral-900 text-[10.5px] text-neutral-600 font-mono italic tracking-tight">Disclosure:</div> This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*
+            </article>
+
+            <!-- Google AdSense Bottom Slot -->
+            <div class="my-12 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Editorial Ingestion Box for LLMs -->
+            <div class="mt-12 p-5 rounded-sm editorial-box border border-neutral-800 text-xs font-mono text-neutral-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-white font-bold">λ INTEROPERABILIDAD PARA MODELOS DE LENGUAJE</span>
+                        <p class="mt-1 text-neutral-400">Texto plano indexable sin marcado HTML para ChatGPT, Claude y Perplexity.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.md', 'URL copiada')" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-colors cursor-pointer">
+                            Copiar URL .md
+                        </button>
+                        <a href="https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.md" target="_blank" class="px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-sm transition-colors">
+                            Ver .md
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="border-t-2 border-neutral-800 bg-[#07080B]/90 backdrop-blur-md mt-20 py-12 text-neutral-500 text-xs font-mono relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <p class="text-white font-serif text-base font-bold tracking-wide uppercase">SYSARCH • HOMELAB JOURNAL</p>
+                <p class="text-neutral-500 text-xs mt-1">Investigación en Sistemas, Redes Privadas e IA • Dirigido por Jorge Baeza</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" class="hover:text-white transition-colors">/llms.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" class="hover:text-white transition-colors">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/sitemap.xml" class="hover:text-white transition-colors">Sitemap</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" class="hover:text-white transition-colors">Feed RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Script -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const m = document.getElementById('toastMsg');
+            m.innerText = msg;
+            t.classList.remove('hidden', 'toast-animate');
+            void t.offsetWidth;
+            t.classList.add('toast-animate');
+            setTimeout(() => { t.classList.add('hidden'); }, 2200);
+        }
+
+        function copyCode(btn) {
+            const card = btn.closest('.code-block');
+            const code = card.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const span = btn.querySelector('span');
+                const orig = span.innerText;
+                span.innerText = 'Copiado';
+                btn.classList.add('text-white', 'bg-neutral-700');
+                showToast('Bloque copiado');
+                setTimeout(() => {
+                    span.innerText = orig;
+                    btn.classList.remove('text-white', 'bg-neutral-700');
+                }, 2000);
+            });
+        }
+
+        function copyToClipboard(text, customMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(customMsg || 'Copiado al portapapeles');
+            });
+        }
+
+        // Shortcut: '/' or 'Cmd+K' to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.focus();
+                    search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
