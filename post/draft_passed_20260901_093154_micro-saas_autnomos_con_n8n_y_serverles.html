@@ -267,7 +267,7 @@
                                   │                               │
                                   ▼                               ▼
                       [ Neon / Supabase Postgres ] ◄──────────────┘</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Frontend Desacoplado</strong>: Una interfaz estática alojada gratuitamente en servicios como Cloudflare Pages o Vercel. Utiliza JavaScript vanilla o frameworks reactivos para enviar cargas de pago (<em>payloads</em>) JSON mediante un <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">fetch()</code> estándar.</li>
 <li><strong>Punto de Entrada (n8n Webhook)</strong>: Un nodo Webhook en n8n escucha las peticiones entrantes. Valida los encabezados de autenticación y transfiere el control al flujo principal.</li>
 <li><strong>Capa del Agente Autónomo</strong>: En lugar de definir reglas rígidas del tipo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">if/else</code>, n8n utiliza nodos de tipo <em>AI Agent</em> acoplados a modelos como Claude 3.5 Sonnet o GPT-4o-mini. El agente decide qué herramientas (<em>tools</em>) invocar según el contexto de la petición.</li>
@@ -336,15 +336,15 @@ CREATE TABLE IF NOT EXISTS leads (
     executed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 2: Configurar la Credencial PostgreSQL en n8n</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En tu instancia de n8n, navega a <strong>Credentials &gt; New Credential</strong>.</p>
+<p>En tu instancia de n8n, navega a <strong>Credentials &gt; New Credential</strong>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Selecciona <strong>Postgres</strong>.</p>
+<p>Selecciona <strong>Postgres</strong>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Rellena los datos utilizando los valores de tu conexión de Neon:
+<p>Rellena los datos utilizando los valores de tu conexión de Neon:
    * <strong>Host</strong>: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">ep-example-123456.pooler.us-east-2.aws.neon.tech</code>
    * <strong>Database</strong>: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">neondb</code>
    * <strong>User</strong> y <strong>Password</strong>: extraídos de tu panel.
@@ -353,15 +353,15 @@ CREATE TABLE IF NOT EXISTS leads (
 </ol>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 3: Crear el Endpoint Webhook y la Interfaz</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Crea un nuevo workflow en n8n con la siguiente estructura básica:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Agrega un nodo <strong>Webhook</strong>.</p>
+<p>Agrega un nodo <strong>Webhook</strong>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Establece el método en <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">POST</code> y el path en <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">v1/lead-ingest</code>.</p>
+<p>Establece el método en <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">POST</code> y el path en <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">v1/lead-ingest</code>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Configura <strong>Response Mode</strong> como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">When Last Node Finishes</code> para enviar una respuesta procesada al cliente, o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">On Received</code> si prefieres un procesamiento asíncrono inmediato.</p>
+<p>Configura <strong>Response Mode</strong> como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">When Last Node Finishes</code> para enviar una respuesta procesada al cliente, o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">On Received</code> si prefieres un procesamiento asíncrono inmediato.</p>
 </li>
 </ol>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Desde el frontend web, la integración se realiza con un script simple:</p>
@@ -407,7 +407,7 @@ async function enviarFormulario(datosLead) {
 └──────────────────────────────┘ └──────────────────────────────┘</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Definición de la Lógica del Agente</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Dentro de n8n, conectamos el nodo <strong>AI Agent</strong> al Webhook. Asignamos una herramienta de tipo <strong>PostgreSQL Tool</strong> que permite al agente leer si el cliente ya existe antes de procesarlo.</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Prompt del Sistema para el Agente:</strong><blockquote class="my-8 py-4 px-6 border-y border-neutral-800 text-center font-serif italic text-xl sm:text-2xl text-neutral-200 leading-relaxed max-w-2xl mx-auto">
 <p>“Eres un agente de ventas técnico. Analiza la propiedad ‘mensaje’ recibida en el payload. Asigna una puntuación de 0 a 100 basada en la urgencia y el presupuesto del cliente. Devuelve estrictamente un objeto JSON con los campos ‘score’, ‘resumen’ y ‘recomendacion’.”</p>
 </blockquote>
@@ -415,7 +415,7 @@ async function enviarFormulario(datosLead) {
 </ul>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Procesamiento y Persistencia</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Un nodo <strong>Switch</strong> evalúa el campo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">score</code> devuelto por el nodo AI:</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Camino A (Score &gt;= 70)</strong>: 
   Ejecuta un nodo Postgres con la operación <strong>Execute Query</strong>:
   sql
@@ -425,7 +425,7 @@ async function enviarFormulario(datosLead) {
   SET score = EXCLUDED.score, estado = ‘re-evaluado’;</li>
 </ul>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">A continuación, dispara un nodo de correo (por ejemplo, vía Resend API o SMTP gratuito) enviando un enlace directo para agendar una llamada.</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Camino B (Score &lt; 70)</strong>:
   Registra al cliente con estado <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">'descartado'</code> y le envía un correo automático sugiriendo recursos de documentación o autoaprendizaje sin intervención del equipo humano.</li>
 </ul>
@@ -433,20 +433,20 @@ async function enviarFormulario(datosLead) {
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Control de Costes, Tiempos de Ejecución y Seguridad</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Aprovechar las capas gratuitas exige prudencia técnica. Un fallo en la arquitectura puede agotar tu cuota de ejecución mensual en minutos o exponer tus datos a accesos no autorizados.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Optimización del Consumo de Ejecuciones</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Evita el Polling Innecesario</strong>: Nunca configures nodos con intervalos que consulten una base de datos cada 60 segundos. Utiliza siempre Webhooks o activadores basados en eventos (<em>triggers</em>).</li>
 <li><strong>Sub-workflows para Tareas Pesadas</strong>: Si tu flujo requiere procesar archivos o realizar múltiples transformaciones, separa la lógica en flujos secundarios mediante el nodo <em>Execute Workflow</em>. Esto mantiene limpias las ejecuciones principales y evita bloqueos de memoria en la instancia de n8n.</li>
 <li><strong>Manejo de Cold Starts en Serverless Postgres</strong>: Las bases de datos como Neon suspenden el cómputo tras minutos de inactividad para ahorrar recursos. El primer evento tras la suspensión puede tardar entre 1 y 2 segundos en responder. Configura el <em>timeout</em> del nodo Postgres en n8n a un mínimo de 10,000 ms para evitar fallos de conexión esporádicos.</li>
 </ol>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Seguridad en la Capa Gratis</h3>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Validación de Encabezados en Webhooks</strong>: No expongas tus Webhooks de n8n de forma pública sin control. Utiliza un nodo <strong>If</strong> inmediatamente después del Webhook para comprobar la presencia de una clave secreta en los encabezados HTTP (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">$request.headers['x-api-key'] === 'tu_secreto'</code>).</li>
 <li><strong>Inyección de SQL</strong>: No concatenes cadenas directamente en las consultas del nodo Postgres. Utiliza siempre la sintaxis de parámetros (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">$1</code>, <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">$2</code>) que ofrece n8n para sanitizar las entradas automáticamente.</li>
 <li><strong>CORS en el Frontend</strong>: Si utilizas un proxy o API Gateway intermedio (como Cloudflare Workers en su capa gratuita), restringe los orígenes permitidos (<em>Access-Control-Allow-Origin</em>) únicamente a tu dominio de producción.</li>
 </ul>
 <div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para tu Despliegue</h2>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Aprovisionamiento</strong>: Despliega n8n utilizando Docker Compose en tu propia infraestructura o en un micro-servidor gratuito. Enlaza el almacenamiento a un volumen persistente.</li>
 <li><strong>Esquema de Datos</strong>: Crea la estructura de datos en Neon Postgres asegurándote de definir índices en los campos que usarás para búsquedas frecuentes (como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">email</code> o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">id</code>).</li>
 <li><strong>Flujo de Trabajo Base</strong>: Construye el flujo en n8n comenzando por la validación de seguridad del Webhook y probando la inserción directa de registros sin agentes de IA.</li>

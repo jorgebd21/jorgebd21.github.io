@@ -303,7 +303,7 @@ volumes:
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">El fin del prompting manual: Agentes que se auto-corrigen</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El paradigma clásico de “escribir el prompt perfecto” ha muerto. En 2026, la ingeniería de prompts ha sido desplazada por el diseño de sistemas de agentes basados en el patrón ReAct (Reason + Act) y bucles de reflexión. </p>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Un agente autónomo moderno no genera una respuesta de un solo golpe. El flujo de trabajo se divide en tres fases iterativas:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Planificación:</strong> El modelo de lenguaje analiza el objetivo, desglosa las subtareas necesarias y selecciona las herramientas (APIs, scripts de Python, búsquedas web) que requiere.</li>
 <li><strong>Ejecución:</strong> Llama a la herramienta seleccionada y captura el resultado (por ejemplo, el JSON de una API de CRM o el texto plano de un raspado web).</li>
 <li><strong>Evaluación y Auto-corrección:</strong> El agente analiza si el resultado de la herramienta resuelve la tarea. Si la API devuelve un error o un formato inesperado, el agente lee el mensaje de error, modifica los parámetros de entrada y vuelve a intentarlo de forma autónoma.</li>
@@ -397,7 +397,7 @@ if (iteraciones &gt; 4) {
 <div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para tu Despliegue</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para poner en marcha este sistema hoy mismo sin incurrir en costes fijos de software, sigue estos pasos ordenados:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Prepara el entorno:</strong> Levanta el archivo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code> proporcionado al inicio de este artículo en un servidor local o VPS económico.</li>
 <li><strong>Obtén tus credenciales:</strong> Regístrate en un agregador de APIs como OpenRouter (para acceder a DeepSeek-R1 y Claude 3.5 Sonnet con un único saldo unificado) y obtén una clave de API gratuita en Tavily para las búsquedas web del agente investigador.</li>
 <li><strong>Configura tu primer flujo ReAct:</strong> En n8n, utiliza el nodo <em>AI Agent</em> en modo <em>Tools Agent</em>. Conéctale el modelo DeepSeek-R1 y añádele la herramienta <em>Wikipedia</em> o <em>HTTP Request</em> para que empiece a interactuar con el exterior.</li>

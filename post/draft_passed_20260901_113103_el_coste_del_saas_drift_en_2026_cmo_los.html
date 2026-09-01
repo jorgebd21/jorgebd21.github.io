@@ -365,7 +365,7 @@ async def negotiate_subscription(login_url, username, password):
 </tbody>
 </table></div>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Análisis técnico de las alternativas</h3>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>ScribePay AI</strong>: Destaca por su enfoque proactivo. No solo lee tus transacciones pasadas; te obliga a enrutar tus suscripciones a través de sus tarjetas de débito virtuales. Si un servicio intenta subir el precio sin previo aviso, el agente de ScribePay rechaza el cargo en la pasarela de pago y te pregunta si deseas renegociar.</li>
 <li><strong>Trim</strong>: Es el estándar para la negociación agresiva en mercados anglosajones y europeos. Utiliza agentes de voz y correo electrónico basados en LLMs para contactar directamente con el soporte de proveedores de internet, cable y SaaS de gran volumen, logrando reducciones de tarifa sin cambiar de plan.</li>
 <li><strong>n8n + Salt Edge (La opción soberana)</strong>: Para ingenieros y entusiastas de la privacidad. Permite conectar tu banco mediante una API de Open Banking (como Salt Edge o GoCardless) a tu propia instancia de n8n corriendo en Docker. Tú controlas los datos de tus transacciones y decides qué scripts de Playwright ejecutar cuando se detecta un cobro no deseado.</li>
@@ -374,7 +374,7 @@ async def negotiate_subscription(login_url, username, password):
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Caso Real: Reduciendo un 42% la factura mensual de infraestructura e IA en 30 días</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para entender el impacto financiero real, analizamos el caso de un desarrollador independiente con una pila de suscripciones mixta (personales y profesionales) que sumaba un coste mensual de <strong>342,50 €</strong>.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">La pila de suscripciones inicial (Día 1)</h3>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>ChatGPT Plus</strong>: 20,00 €/mes</li>
 <li><strong>Claude Pro</strong>: 20,00 €/mes</li>
 <li><strong>Midjourney (Plan Estándar)</strong>: 30,00 €/mes</li>
@@ -407,7 +407,7 @@ Ahorro Anual Proyectado: 1.713,12 €</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. El peligro del “Screen Scraping” frente a las APIs oficiales (PSD3)</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Nunca utilices servicios que te soliciten tu contraseña bancaria principal para realizar <em>screen scraping</em> (técnica donde el servicio simula ser tú en la banca online para descargar los movimientos). </p>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Exige siempre integraciones basadas en <strong>OAuth 2.0</strong> bajo el estándar de Open Banking. Con este método:</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>Eres redirigido a la aplicación oficial de tu banco para autorizar el acceso.</li>
 <li>El agente solo recibe un token de acceso temporal (generalmente válido por 90 días).</li>
 <li>El alcance (</li>
@@ -415,7 +415,7 @@ Ahorro Anual Proyectado: 1.713,12 €</p>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><em>scope</em>) del token es estrictamente de <strong>solo lectura</strong> (Read-Only). El agente no puede realizar transferencias ni modificar datos de la cuenta.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. El patrón de arquitectura “Buffer Account” (Cuenta Puente)</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para mitigar el riesgo de que un agente de IA con permisos de ejecución cometa un error o sea vulnerado, implementa la arquitectura de cuenta puente:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Aísla tu cuenta principal</strong>: Tu cuenta de nómina e inversiones nunca debe estar conectada a agentes de IA de terceros.</li>
 <li><strong>Crea una cuenta fintech secundaria</strong>: Utiliza entidades que permitan la creación rápida de subcuentas y APIs robustas (como Revolut, N26 o Bunq).</li>
 <li><strong>Automatiza el fondeo</strong>: Configura una transferencia periódica (ej. semanal o mensual) desde tu cuenta principal a la cuenta puente, cubriendo únicamente el presupuesto estimado de tus suscripciones.</li>
@@ -424,7 +424,7 @@ Ahorro Anual Proyectado: 1.713,12 €</p>
 <div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Recomendaciones Prácticas y Siguientes Pasos</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Si quieres empezar a automatizar el control de tus suscripciones hoy mismo sin comprometer tu seguridad, sigue esta hoja de ruta:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Realiza una auditoría estática inicial</strong>: Antes de dar acceso a agentes autónomos, utiliza una herramienta de análisis local. Puedes exportar un extracto en formato CSV de tus últimos 6 meses de transacciones bancarias y procesarlo con un script local de Python utilizando modelos de lenguaje de código abierto (como Llama 3 o Mistral corriendo en Ollama) para clasificar y detectar cobros recurrentes.</li>
 <li><strong>Migra tus suscripciones a tarjetas virtuales</strong>: Reemplaza los datos de tu tarjeta física en todos los servicios SaaS por tarjetas virtuales dedicadas (una tarjeta por servicio si tu proveedor fintech lo permite). Configura límites de gasto mensuales estrictos en cada tarjeta virtual un 5% por encima del valor de la suscripción para evitar subidas de precio unilaterales.</li>
 <li><strong>Implementa un agente de solo lectura</strong>: Comienza con herramientas como ScribePay o Cushion configuradas exclusivamente con permisos de lectura. Deja que la IA te sugiera las optimizaciones mediante notificaciones antes de delegar la ejecución de cancelaciones automáticas.</li>

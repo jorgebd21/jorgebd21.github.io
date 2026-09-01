@@ -261,7 +261,7 @@
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">1. DeepSeek-V4 en Local: Razonamiento Avanzado sin Peaje por Token</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">DeepSeek-V4 no es simplemente otro modelo de lenguaje; es una arquitectura optimizada para la inferencia eficiente mediante <strong>Mixture of Experts (MoE)</strong> y <strong>Multi-Head Latent Attention (MLA)</strong>. A diferencia de las arquitecturas densas tradicionales que activan la totalidad de sus parámetros en cada pase, DeepSeek-V4 rutea los tokens a través de subredes especializadas.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">¿Por qué el procesamiento local supera a la nube en 2026?</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Latencia del primer token (TTFT):</strong> Al eliminar el <em>round-trip</em> de red (DNS, TLS, colas de balanceo en la nube), la inferencia directa en VRAM local reduce el tiempo de primer token de 800 ms (promedio en APIs de la nube) a menos de 150 ms en un bus PCIe 5.0.</li>
 <li><strong>Soberanía absoluta sobre el contexto:</strong> Enviar bases de código propietarias, logs de producción o esquemas de bases de datos PostgreSQL a endpoints de terceros supone un riesgo de cumplimiento normativo (GDPR, SOC2). En local, el flujo de datos jamás abandona la interfaz de red <em>loopback</em> (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">127.0.0.1</code>).</li>
 <li><strong>Economía de escala inversa:</strong> En la nube, cuanto más automatizas y más agentes ejecutas, más pagas. En local, tras amortizar la inversión en hardware, el coste marginal de procesar 100 millones de tokens es exactamente cero euros en consumo de API.</li>
@@ -270,7 +270,7 @@
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">2. Guía Paso a Paso: Tu Primer Agente Autónomo Local en 15 Minutos</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para montar un agente funcional capaz de leer tu sistema de archivos, ejecutar comandos y procesar eventos sin escribir código complejo, utilizaremos la pila estándar de 2026: <strong>Ollama</strong> como motor de inferencia local y <strong>n8n (v1+)</strong> como orquestador de agentes autónomos, encapsulados mediante <strong>Docker Compose</strong>.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Requisitos previos</h3>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>Docker Desktop o Docker Engine con el plugin <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose-v2</code>.</li>
 <li>GPU NVIDIA con soporte CUDA (mínimo 16 GB VRAM) o Apple Silicon (M2/M3/M4 con 36 GB+ de memoria unificada).</li>
 </ul>
@@ -326,21 +326,21 @@ docker compose up -d</code></pre></div>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Para equipos con 24GB-32GB de VRAM/RAM unificada (Versión cuantizada Q4_K_M)</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">docker exec -it ollama_engine ollama run deepseek-v4:q4_k_m</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 3: Conectar n8n con el Modelo Local</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Abre tu navegador e ingresa a <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://localhost:5678</code>.</p>
+<p>Abre tu navegador e ingresa a <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://localhost:5678</code>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Crea un nuevo Workflow y añade un nodo de tipo <strong>AI Agent</strong>.</p>
+<p>Crea un nuevo Workflow y añade un nodo de tipo <strong>AI Agent</strong>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En la sección de la llm (<em>Model</em>), selecciona <strong>Ollama Chat Model</strong>.</p>
+<p>En la sección de la llm (<em>Model</em>), selecciona <strong>Ollama Chat Model</strong>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Configura la URL de conexión como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://ollama:11434</code> y selecciona el modelo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">deepseek-v4:q4_k_m</code>.</p>
+<p>Configura la URL de conexión como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://ollama:11434</code> y selecciona el modelo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">deepseek-v4:q4_k_m</code>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Vincula herramientas de n8n al agente (como lectura de correos local, ejecutor de scripts Bash o cliente de PostgreSQL).</p>
+<p>Vincula herramientas de n8n al agente (como lectura de correos local, ejecutor de scripts Bash o cliente de PostgreSQL).</p>
 </li>
 </ol>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En este momento tienes un agente autónomo operando 100% en local, capaz de responder a disparadores (webhooks, temporizadores o eventos de archivo) y tomar decisiones de ejecución sin llamar a un solo servicio externo.</p>
@@ -385,7 +385,7 @@ docker compose up -d</code></pre></div>
 </table></div>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Análisis del Punto de Equilibrio (ROI)</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Si un equipo de 5 ingenieros consume un promedio de 40 millones de tokens mensuales entre tareas de desarrollo, pruebas y análisis de logs:</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Coste en Cloud API (GPT-5 / Claude 4):</strong> Promedio de <strong>680 € a 950 € al mes</strong> (aprox. 10.000 €/año).</li>
 <li><strong>Coste Hardware Local:</strong> Una estación de trabajo dedicada con GPU NVIDIA RTX 5090 (32 GB VRAM) o un Mac Studio M4 (64 GB RAM unificada) ronda los <strong>2.800 € - 3.500 €</strong>.</li>
 </ul>
@@ -427,7 +427,7 @@ export OLLAMA_KV_CACHE_TYPE=q4_0</p>
 <div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Recomendaciones Prácticas y Siguientes Pasos</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para consolidar tu migración desde servicios cloud hacia una infraestructura de agentes locales autónomos en 2026, sigue este plan de acción:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Audita tu consumo actual de tokens:</strong> Identifica qué flujos de trabajo requieren razonamiento complejo (refactorización de código, arquitectura) y cuáles son tareas puramente mecánicas (formateo JSON, extracción de entidades).</li>
 <li><strong>Prepara un nodo dedicado:</strong> Evita ejecutar el servidor de inferencia en la misma máquina en la que compilas código o juegas. Un nodo headless con Linux (Ubuntu Server 24.04 LTS o Proxmox 8 con passthrough de GPU) es la opción ideal para mantener agentes n8n escuchando 24/7.</li>
 <li><strong>Estandariza los formatos de cuantización:</strong> Apuesta por el formato <strong>GGUF</strong> si usas Ollama/llama.cpp para flexibilidad en CPU/GPU mixtas, o <strong>EXL2/AWQ</strong> si trabajas exclusivamente con motores de alto rendimiento como vLLM en clústeres NVIDIA.</li>

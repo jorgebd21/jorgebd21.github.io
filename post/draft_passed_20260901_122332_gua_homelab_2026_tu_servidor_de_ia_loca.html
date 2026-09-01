@@ -307,15 +307,15 @@
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La elección del hardware es crucial y un par de decisiones equivocadas pueden arruinar la experiencia o la longevidad de tu servidor.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Cuellos de Botella en la RAM No Ampliable</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Muchos Mini PCs ultracompactos, especialmente los de gama baja, vienen con la RAM soldada a la placa base. Esto es un <em>error fatal</em> para un servidor de Homelab.</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Necesidad de RAM:</strong> Home Assistant, Docker, y especialmente los LLMs, son voraces en cuanto a memoria. 16GB de RAM es un mínimo absoluto para un servidor con Home Assistant y un LLM pequeño. Para modelos de 13B o 30B, 32GB o incluso 64GB son recomendables.</li>
 <li><strong>Ampliabilidad:</strong> Si compras un Mini PC con 8GB o 16GB soldados, te quedarás sin margen de mejora. En cuanto intentes cargar un LLM más grande o añadir más servicios Docker, el rendimiento se desplomará debido al <em>swapping</em> constante al disco.</li>
 <li><strong>Recomendación:</strong> Busca Mini PCs con ranuras SO-DIMM (DDR5 es el estándar actual) que permitan la ampliación. Idealmente, compra uno con 16GB y la opción de añadir otro módulo para llegar a 32GB si es necesario.</li>
 </ul>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Almacenamiento NVMe de Bajo Coste en Servidores de Escritura Continua</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Los SSD NVMe son rápidos y asequibles, pero no todos son iguales, especialmente para un servidor 24/7 con bases de datos (como la de Home Assistant) y logs que generan escrituras constantes.</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
-<li><strong>Tipos de NAND:</strong><ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Tipos de NAND:</strong><ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>QLC (Quad-Level Cell):</strong> La más barata, pero la menos duradera y con peor rendimiento sostenido. Cada celda almacena 4 bits, lo que reduce su vida útil (TBW - Terabytes Written).</li>
 <li><strong>TLC (Triple-Level Cell):</strong> Un buen equilibrio entre coste y durabilidad. Cada celda almacena 3 bits.</li>
 <li><strong>MLC (Multi-Level Cell):</strong> Más cara, pero más duradera y rápida. Cada celda almacena 2 bits.</li>
@@ -328,11 +328,11 @@
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Guía de Despliegue Paso a Paso: Home Assistant y Ollama en tu Mini PC</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Vamos a montar un sistema robusto y modular usando Docker Compose.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Preparación del Hardware y Sistema Operativo</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Mini PC:</strong> Adquiere un Mini PC con al menos 16GB de RAM (ampliable a 32GB), un NVMe TLC con DRAM cache, y un procesador con NPU (Intel Core Ultra o AMD Ryzen 8000/9000) si tu presupuesto lo permite, o un N100/N305 para empezar.</li>
 <li><strong>Instalación del SO:</strong> Instala una distribución Linux ligera y estable. Debian 12 “Bookworm” (versión Server, sin entorno gráfico) es una excelente opción.</li>
 </ol>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>Descarga la ISO, crea un USB booteable.</li>
 <li>Instala Debian, configurando una IP estática para tu servidor.</li>
 <li>Actualiza el sistema:
@@ -362,15 +362,15 @@ newgrp docker # O cierra y vuelve a abrir la sesión SSH</code></pre></div>
 <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">docker run hello-world</code></pre></div></p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">3. Configuración de Home Assistant y Ollama con Docker Compose</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Crearemos un archivo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code> para gestionar ambos servicios.</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Crear directorios:</strong>
 <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">mkdir -p ~/homelab/homeassistant/config
 mkdir -p ~/homelab/ollama/models</code></pre></div></li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>Crear <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code>:</strong>
+<p><strong>Crear <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code>:</strong>
 <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">nano ~/homelab/docker-compose.yml</code></pre></div>
     Pega el siguiente contenido (asegúrate de ajustar la zona horaria y el dispositivo NPU si es necesario):</p>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">version: '3.8'
+<p><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">version: '3.8'
 
 services:
   homeassistant:
@@ -404,26 +404,26 @@ services:
 *   <strong>Nota sobre <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">devices</code> para Ollama:</strong> La forma de exponer la NPU al contenedor Docker puede variar. Para Intel Core Ultra, a menudo es suficiente con <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/dri</code> (para la iGPU que la NPU utiliza). Para AMD Ryzen con XDNA, puede ser <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/kfd</code> o dispositivos específicos bajo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/accel</code>. Consulta la documentación de Ollama y de tu distribución Linux para la configuración exacta de tu NPU. Si no estás seguro, omite la sección <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">devices</code> inicialmente; Ollama funcionará en CPU, aunque más lento.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>Iniciar los servicios:</strong>
+<p><strong>Iniciar los servicios:</strong>
 <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">cd ~/homelab
 docker compose up -d</code></pre></div>
     Esto descargará las imágenes y arrancará los contenedores.</p>
 </li>
 </ol>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">4. Configuración Inicial de Home Assistant</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Accede a Home Assistant desde tu navegador: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://&lt;IP_DE_TU_MINIPC&gt;:8123</code></p>
+<p>Accede a Home Assistant desde tu navegador: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://&lt;IP_DE_TU_MINIPC&gt;:8123</code></p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Sigue el asistente de configuración para crear tu usuario y contraseña.</p>
+<p>Sigue el asistente de configuración para crear tu usuario y contraseña.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Home Assistant debería detectar automáticamente algunos dispositivos en tu red.</p>
+<p>Home Assistant debería detectar automáticamente algunos dispositivos en tu red.</p>
 </li>
 </ol>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">5. Descarga y Uso de Modelos LLM con Ollama</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Descargar un modelo:</strong> Desde tu Mini PC (o vía SSH), usa el cliente de Ollama para descargar un modelo. Llama 3 8B es un buen punto de partida.
     <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">docker exec -it ollama ollama run llama3</code></pre></div>
     Esto descargará el modelo y te permitirá interactuar con él directamente en la terminal. Escribe <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">bye</code> para salir.</li>
@@ -435,19 +435,19 @@ docker compose up -d</code></pre></div>
 </ol>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">6. Integración de Ollama con Home Assistant para IA Local</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Home Assistant tiene una integración nativa para Ollama, lo que te permite usar tu LLM local para automatizaciones, respuestas de voz, etc.</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>En Home Assistant:</strong> Ve a <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Ajustes</code> -&gt; <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Dispositivos y Servicios</code> -&gt; <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Añadir Integración</code>.</p>
+<p><strong>En Home Assistant:</strong> Ve a <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Ajustes</code> -&gt; <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Dispositivos y Servicios</code> -&gt; <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Añadir Integración</code>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Busca “Ollama”.</p>
+<p>Busca “Ollama”.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Introduce la URL de tu servidor Ollama: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://&lt;IP_DE_TU_MINIPC&gt;:11434</code>.</p>
+<p>Introduce la URL de tu servidor Ollama: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://&lt;IP_DE_TU_MINIPC&gt;:11434</code>.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Una vez configurado, puedes usar el servicio <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">llm.generate</code> en tus automatizaciones o scripts. Por ejemplo, para un asistente de voz local, puedes configurar un micrófono USB en tu Mini PC y usar la integración “Assist” de Home Assistant, dirigiéndola a tu modelo Ollama.</p>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class=""># Ejemplo de automatización en Home Assistant (automations.yaml)
+<p>Una vez configurado, puedes usar el servicio <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">llm.generate</code> en tus automatizaciones o scripts. Por ejemplo, para un asistente de voz local, puedes configurar un micrófono USB en tu Mini PC y usar la integración “Assist” de Home Assistant, dirigiéndola a tu modelo Ollama.</p>
+<p><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class=""># Ejemplo de automatización en Home Assistant (automations.yaml)
 - alias: 'Respuesta de IA a comando de voz'
   trigger:
     platform: event
@@ -473,15 +473,15 @@ docker compose up -d</code></pre></div>
 </ol>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para tu Despliegue</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Has sentado las bases de un Homelab potente y privado. Aquí tienes algunos pasos siguientes y consideraciones:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
-<li><strong>Seguridad:</strong><ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Seguridad:</strong><ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>Cambia las contraseñas por defecto.</li>
 <li>Configura un firewall (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">ufw</code>) en tu Mini PC para permitir solo los puertos necesarios (SSH, 8123 para HA, 11434 para Ollama).</li>
 <li>Considera una VPN (ej. WireGuard) para acceder a tu Homelab de forma segura desde fuera de casa, en lugar de abrir puertos directamente al router.</li>
 </ul>
 </li>
 <li><strong>Copias de Seguridad:</strong> Configura copias de seguridad automáticas del directorio <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">~/homelab/homeassistant/config</code> y <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">~/homelab/ollama/models</code> a un almacenamiento externo o a la nube (cifrado).</li>
-<li><strong>Más Servicios:</strong> Una vez que te sientas cómodo, puedes añadir más servicios Docker:<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Más Servicios:</strong> Una vez que te sientas cómodo, puedes añadir más servicios Docker:<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>AdGuard Home:</strong> Bloqueador de anuncios y rastreadores a nivel de red.</li>
 <li><strong>Vaultwarden:</strong> Gestor de contraseñas autoalojado.</li>
 <li><strong>Nextcloud:</strong> Nube personal para archivos y colaboración.</li>

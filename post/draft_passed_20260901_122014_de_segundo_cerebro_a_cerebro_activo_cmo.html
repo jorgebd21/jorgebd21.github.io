@@ -278,15 +278,15 @@
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Este comando descargará el modelo y levantará un servidor API local expuesto por defecto en el puerto <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">11434</code>. Puedes verificar que está respondiendo correctamente con un simple <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">curl</code>:</p>
 <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">curl http://localhost:11434/api/tags</code></pre></div>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 2: Configuración de Obsidian</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Abre tu bóveda de Obsidian.</p>
+<p>Abre tu bóveda de Obsidian.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Ve a <strong>Configuración</strong> &gt; <strong>Plugins de la comunidad</strong> y busca <strong>Copilot</strong> (de Logan Yang). Instálalo y actívalo.</p>
+<p>Ve a <strong>Configuración</strong> &gt; <strong>Plugins de la comunidad</strong> y busca <strong>Copilot</strong> (de Logan Yang). Instálalo y actívalo.</p>
 </li>
 <li>
-<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Entra en la configuración del plugin Copilot y ajusta los siguientes parámetros:
+<p>Entra en la configuración del plugin Copilot y ajusta los siguientes parámetros:
    - <strong>Provider</strong>: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Ollama</code>
    - <strong>Ollama URL</strong>: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://localhost:11434</code>
    - <strong>Active Model</strong>: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">phi-4</code> (o el modelo que hayas descargado)
@@ -381,13 +381,13 @@ Transcripción:
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para tu Despliegue y Recomendaciones de Hardware</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para ejecutar este ecosistema de forma fluida en 2026, la elección del hardware es el factor determinante. La inferencia local de LLMs depende casi exclusivamente del ancho de banda de la memoria y de la cantidad de VRAM disponible.</p>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Requisitos de Hardware Recomendados (2026)</h3>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Arquitectura Apple Silicon (Mac Studio / MacBook Pro):</strong> M2/M3/M4 con un mínimo de <strong>32 GB de memoria unificada</strong>. Los chips de Apple son excepcionales para IA local debido a su bus de memoria ultra ancho (hasta 800 GB/s en modelos Max), lo que permite ejecutar modelos de hasta 32B parámetros con una latencia mínima.</li>
 <li><strong>Arquitectura PC (Windows/Linux):</strong> Procesador AMD Ryzen serie 9000 o Intel Core Ultra, acompañado de una tarjeta gráfica dedicada <strong>Nvidia RTX 4060 Ti (16GB VRAM)</strong> o superior. La VRAM dedicada de Nvidia sigue ofreciendo la mayor velocidad de generación de tokens por segundo gracias a los núcleos Tensor.</li>
 <li><strong>Almacenamiento:</strong> SSD NVMe PCIe 4.0/5.0. Los modelos de lenguaje ocupan entre 4 GB y 15 GB de espacio en disco y deben cargarse rápidamente en la memoria RAM/VRAM al iniciar el sistema.</li>
 </ul>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Pasos inmediatos para consolidar tu Cerebro Activo</h3>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Limpia tu bóveda:</strong> Elimina los duplicados y las notas vacías. La calidad de las respuestas de tu RAG local depende directamente de la calidad de tus datos de origen (<em>Garbage in, garbage out</em>).</li>
 <li><strong>Estandariza tus metadatos:</strong> Utiliza propiedades YAML o Frontmatter consistentes en tus notas de Obsidian para facilitar el filtrado semántico de los agentes de IA.</li>
 <li><strong>Automatiza la copia de seguridad:</strong> Al trabajar en local, la seguridad de tus datos es tu responsabilidad. Configura copias de seguridad cifradas automáticas utilizando herramientas como <em>Restic</em> o <em>Kopia</em> hacia un almacenamiento frío o un NAS propio.</li>

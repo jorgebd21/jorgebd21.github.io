@@ -320,14 +320,14 @@
 +------------------------------------------------------------------+</code></pre></div>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. El cuello de botella insalvable del ancho de banda de memoria</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En la inferencia de LLMs, la velocidad de generación de tokens no depende de los TFLOPS del procesador, sino del ancho de banda de la memoria RAM (GB/s). Cuando un modelo de lenguaje está cargado en la VRAM compartida de la iGPU/NPU, cada token generado exige leer la totalidad de los pesos del modelo desde la memoria principal.</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Configuración en Monocanal (Single-Channel):</strong> Reduce el ancho de banda a la mitad (~38.4 GB/s en DDR5). La velocidad de generación en un modelo de 7B (Q4_K_M) cae a unos infumables 3 a 5 tokens por segundo.</li>
 <li><strong>Configuración en Doble Canal (Dual-Channel DDR5-5600):</strong> Ofrece hasta ~89.6 GB/s, elevando la velocidad de inferencia a 18-25 tokens por segundo en el mismo modelo.</li>
 <li><strong>Memorias LPDDR5x Soldadas (7500+ MT/s):</strong> Alcanzan anchos de banda superiores a los 120 GB/s. Si compras un Mini PC con memoria soldada, asegúrate de pedir 32 GB o 64 GB desde el primer día, ya que no podrás ampliarla.</li>
 </ul>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Térmicas y Throttling en chasis de 0.5 Litros</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La ejecución continua de un agente de IA procesando documentos o transcribiendo audio mantendrá la APU al 100% de carga durante minutos. En chasis extremadamente compactos:</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>El procesador alcanza rápidamente el límite térmico (Tjunction ~95°C) y aplica <em>thermal throttling</em>, reduciendo las frecuencias de reloj hasta un 40%.</li>
 <li>Busca Mini PCs que utilicen disipación por cámara de vapor o ventiladores de gran diámetro con perfiles BIOS configurables en modo “Performance” a 35W o 45W sostenidos.</li>
 </ul>
@@ -420,14 +420,14 @@ services:
 +-------------------------------------------------------------------+</code></pre></div>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Transcripción de Reuniones y Resumen de Documentos Confidenciales</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Utilizando la combinación de <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">faster-whisper</code> procesado mediante las extensiones de la NPU y un modelo como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Qwen2.5-Coder-7B</code> o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Llama-3.2-3B-Instruct</code>:</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Flujo:</strong> Graba notas de voz o reuniones de trabajo desde tu teléfono mediante una automatización con la app local. El archivo de audio entra en una carpeta monitorizada por un contenedor <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">n8n</code> ejecutable en el Mini PC.</li>
 <li><strong>Procesamiento:</strong> Whisper convierte el audio a texto en cuestión de segundos (aprovechando la aceleración vectorial). Seguidamente, Ollama procesa la plantilla de resumen, extracta los puntos de acción y los envía directamente a tu gestor de tareas o base de datos local (Vault de Obsidian / PostgreSQL).</li>
 <li><strong>Ventaja:</strong> Ningún dato empresarial o conversación privada sale de tu red local.</li>
 </ul>
 <h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Domótica con Procesamiento de Intenciones por Lenguaje Natural</h3>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El procesamiento clásico de voz en domótica mediante soluciones basadas en la nube sufre latencias inherentes (1.5 a 3 segundos) y problemas de privacidad. Integrando Home Assistant con la extensión <strong>Local LLM Conversation</strong>:</p>
-<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li>Puedes emitir comandos ambiguos o complejos: <em>“Hace fresco en la sala y voy a empezar a ver una película”</em>.</li>
 <li>El modelo LLM local (ejecutado en la NPU/iGPU en &lt; 150ms) analiza la intención, determina que debe subir la temperatura del termostato del salón a 21°C, bajar las persianas al 80% y atenuar la iluminación de la TV.</li>
 <li>La acción se ejecuta instantáneamente mediante protocolos locales como Zigbee (vía Zigbee2MQTT) o Matter sin tocar servidores de terceros.</li>
@@ -435,11 +435,11 @@ services:
 <div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
 <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Recomendaciones Prácticas y Siguientes Pasos</h2>
 <p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para garantizar el éxito en el montaje de tu Homelab de IA local durante este año, sigue esta lista de verificación técnica antes de realizar cualquier compra o despliegue:</p>
-<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Selección estricta de hardware:</strong> Opta por Mini PCs equipados con procesadores <strong>AMD Ryzen 7 8840HS / 9850HS</strong> o <strong>Intel Core Ultra 5/7</strong>. Evita procesadores de generaciones anteriores a 2024 si tu objetivo principal incluye ejecutar LLMs locales de manera fluida.</li>
 <li><strong>Dimensionamiento de RAM:</strong> Instala un kit de <strong>32 GB o 64 GB de memoria RAM DDR5 a 5600 MT/s en configuración de doble canal</strong>. Asegúrate en el BIOS de asignar al menos 8 GB o 16 GB de memoria del sistema como VRAM compartida (<em>UMA Frame Buffer Size</em>) para la iGPU/NPU.</li>
 <li><strong>Almacenamiento térmicamente protegido:</strong> Utiliza SSDs NVMe M.2 PCIe 4.0 con memorias TLC (evita QLC para bases de datos vectoriales) y asegúrate de que el chasis incluya un disipador de aluminio o un pequeño ventilador dedicado a las unidades M.2.</li>
-<li><strong>Estrategia de modelos:</strong> No intentes ejecutar modelos de 70B parámetros. La excelencia en Homelabs locales en 2026 se obtiene combinando modelos especializados pequeños:<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Estrategia de modelos:</strong> No intentes ejecutar modelos de 70B parámetros. La excelencia en Homelabs locales en 2026 se obtiene combinando modelos especializados pequeños:<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
 <li><strong>Whisper Medium/Small</strong> para transcripción de voz.</li>
 <li><strong>Llama 3.2 (3B)</strong> o <strong>Phi-3.5</strong> para tareas de control domótico ultra-rápidas.</li>
 <li><strong>Qwen 2.5 (7B o 14B)</strong> cuantizado en <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Q4_K_M</code> para tareas complejas de RAG, programación y generación de texto.</li>
