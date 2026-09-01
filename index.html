@@ -190,16 +190,38 @@
     <!-- Lead Story Block -->
     <div id="leadArticleContainer">
         
-        <section class="border-b-2 border-neutral-800 pb-10 mb-12 text-center py-16">
-            <div class="font-mono text-xs text-neutral-400 uppercase tracking-widest mb-3">
-                [SYSARCH • ARCHIVO EDITORIAL EN PREPARACIÓN]
+        <section class="border-b-2 border-neutral-800 pb-10 mb-12">
+            <div class="flex items-center gap-2 mb-3 font-mono text-xs text-neutral-400 uppercase tracking-widest">
+                <span class="text-white font-bold">[ARTÍCULO DE PORTADA]</span>
+                <span class="text-neutral-600">//</span>
+                <span>Inteligencia Artificial</span>
             </div>
-            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight">
-                Archivo Limpio &amp; Próximas Investigaciones en Camino
+
+            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] hover:text-neutral-300 transition-colors">
+                <a href="https://jorgebd21.github.io/post/draft_passed_20260901_090137_la_pila_no-code_de_2026_cmo_crear_webs_.html">La pila No-Code de 2026: Cómo crear webs autónomas con IA usando n8n y cloud gratuito</a>
             </h2>
-            <p class="font-body text-neutral-400 text-base sm:text-lg mt-3 max-w-2xl mx-auto leading-relaxed">
-                El sistema editorial autónomo está activo. Las próximas investigaciones técnicas sobre los 5 pilares se desplegarán en las franjas matinales (07:40 - 09:00) y vespertinas (16:40 - 18:00).
+
+            <div class="mt-3 flex items-center gap-2 font-mono text-xs text-neutral-400">
+                <span>Por Jorge Baeza</span>
+                <span>•</span>
+                <span>01.09.2026</span>
+                <span>•</span>
+                <span>9 min de lectura (1,766 palabras)</span>
+            </div>
+
+            <p class="font-body text-neutral-300 text-lg sm:text-xl mt-4 leading-relaxed max-w-4xl">
+                Montar un SaaS de atención al cliente o un backend automatizado solía requerir un presupuesto mínimo de 100 a 150 dólares mensuales en infraestructura, bases de datos gestionadas y orquestadores de funciones serverless. En 2026, ese coste de entrada se ha desplomado a cero.
             </p>
+
+            <div class="mt-6 flex flex-wrap items-center gap-4">
+                <a href="https://jorgebd21.github.io/post/draft_passed_20260901_090137_la_pila_no-code_de_2026_cmo_crear_webs_.html" class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-950 font-sans font-semibold text-xs rounded-sm hover:bg-white transition-colors">
+                    <span>Continuar leyendo análisis</span>
+                    <span>→</span>
+                </a>
+                <a href="https://jorgebd21.github.io/post/draft_passed_20260901_090137_la_pila_no-code_de_2026_cmo_crear_webs_.md" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-neutral-200 font-mono text-xs transition-colors" title="Ver archivo Markdown sin maquetar para LLMs">
+                    <span class="text-neutral-500">λ</span> <span>.md raw</span>
+                </a>
+            </div>
         </section>
         
     </div>
@@ -225,9 +247,9 @@
             <!-- Category Filter Links with Underline -->
             <div class="flex flex-wrap items-center gap-x-5 gap-y-2 py-3 border-b border-neutral-800 text-xs font-mono text-neutral-400" id="categoryNav">
                 <button onclick="filterCategory('all')" class="cat-link active pb-1 border-b-2 border-white text-white font-semibold cursor-pointer">
-                    TODOS (0)
+                    TODOS (1)
                 </button>
-                
+                <button onclick="filterCategory('Inteligencia Artificial')" class="cat-link pb-1 border-b-2 border-transparent hover:text-white transition-all cursor-pointer uppercase">Inteligencia Artificial (1)</button>
             </div>
 
             <!-- Articles Feed List -->

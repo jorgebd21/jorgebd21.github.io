@@ -1,18 +1,3 @@
-# SYSARCH | Publicación Técnica de Arquitectura, Homelab & IA 2026 - CORPUS TÉCNICO COMPLETO PARA LLMs
-# Generado: 2026-09-01 09:01:37
-# Total Artículos: 1
-# URL Base: https://jorgebd21.github.io
-
-===============================================================================
-
-DOCUMENTO 1/1
-Título: La pila No-Code de 2026: Cómo crear webs autónomas con IA usando n8n y cloud gratuito
-Categoría: Inteligencia Artificial
-URL Canónica: https://jorgebd21.github.io/post/draft_passed_20260901_090137_la_pila_no-code_de_2026_cmo_crear_webs_.html
-URL Markdown: https://jorgebd21.github.io/post/draft_passed_20260901_090137_la_pila_no-code_de_2026_cmo_crear_webs_.md
-Fecha: 2026-09-01
-Palabras: 1766
-
 # La pila No-Code de 2026: Cómo crear webs autónomas con IA usando n8n y cloud gratuito
 
 Montar un SaaS de atención al cliente o un backend automatizado solía requerir un presupuesto mínimo de 100 a 150 dólares mensuales en infraestructura, bases de datos gestionadas y orquestadores de funciones serverless. En 2026, ese coste de entrada se ha desplomado a cero. 
@@ -184,7 +169,3 @@ Esta pila tecnológica demuestra que en 2026 la barrera de entrada para crear so
 ---
 
 > *Disclosure: This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*
-
-
--------------------------------------------------------------------------------
-
