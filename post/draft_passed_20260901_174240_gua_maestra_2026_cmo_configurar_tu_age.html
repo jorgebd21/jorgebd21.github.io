@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Maestra 2026: Cómo Configurar tu Agente de Finanzas Autónomo para Eliminar Suscripciones Fantasma y Optimizar tus Gastos en Tiempo Real — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026</title>
+    <meta name="description" content="El coste oculto de las suscripciones digitales no utilizadas, o &quot;suscripciones fantasma&quot;, se ha disparado, con un usuario medio en la UE perdiendo hasta 45€ mensuales en servicios olvidados. Este drenaje financiero, exacerbado por la fragme...">
+    
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Guía Maestra 2026: Cómo Configurar tu Agente de Finanzas Autónomo para Eliminar Suscripciones Fantasma y Optimizar tus Gastos en Tiempo Real — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026">
+    <meta property="og:description" content="El coste oculto de las suscripciones digitales no utilizadas, o &quot;suscripciones fantasma&quot;, se ha disparado, con un usuario medio en la UE perdiendo hasta 45€ mensuales en servicios olvidados. Este drenaje financiero, exacerbado por la fragme...">
+    <meta property="og:url" content="https://jorgebd21.github.io">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect Google Fonts for Editorial Press (Newsreader + Lora + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        body: ['"Lora"', 'Charter', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Editorial Typography & Universal Background Styles -->
+    <style>
+        body {
+            background-color: #0A0B0E;
+            color: #D4D4D8;
+            font-family: 'Lora', Charter, Georgia, serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .font-serif { font-family: 'Newsreader', Georgia, serif; }
+        .font-body { font-family: 'Lora', Charter, Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Universal Editorial Press Background Across ALL Pages */
+        .editorial-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../assets/editorial_bg.jpg'), url('/assets/editorial_bg.jpg'), url('https://jorgebd21.github.io/assets/editorial_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.16;
+            filter: contrast(135%) brightness(105%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .editorial-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(10, 11, 14, 0.35) 0%, rgba(10, 11, 14, 0.80) 65%, #0A0B0E 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Classic Editorial Drop Cap */
+        .editorial-lead::first-letter {
+            font-family: 'Newsreader', Georgia, serif;
+            float: left;
+            font-size: 3.85em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Subtle borders and paper feel */
+        .editorial-box {
+            background-color: rgba(15, 16, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .editorial-divider {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Clean Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0B0E; }
+        ::-webkit-scrollbar-thumb { background: #272A36; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4354; }
+
+        /* Toast animation */
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .toast-animate { animation: toastFade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+
+    <!-- Google AdSense Official Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9111135660504315" crossorigin="anonymous"></script>
+
+    <!-- LLM Autodiscovery & RSS -->
+    <link rel="alternate" type="text/plain" href="https://jorgebd21.github.io/llms.txt" title="LLM Context Index">
+    <link rel="alternate" type="application/rss+xml" href="https://jorgebd21.github.io/feed.xml" title="RSS Feed">
+    
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Guía Maestra 2026: Cómo Configurar tu Agente de Finanzas Autónomo para Eliminar Suscripciones Fantasma y Optimizar tus Gastos en Tiempo Real",
+            "description": "El coste oculto de las suscripciones digitales no utilizadas, o \"suscripciones fantasma\", se ha disparado, con un usuario medio en la UE perdiendo hasta 45€ mensuales en servicios olvidados. Este drenaje financiero, exacerbado por la fragme...",
+            "author": { "@type": "Person", "name": "Jorge Baeza" },
+            "publisher": { "@type": "Organization", "name": "SYSARCH • HOMELAB JOURNAL" },
+            "datePublished": "2026-09-01",
+            "dateModified": "2026-09-01",
+            "mainEntityOfPage": "https://jorgebd21.github.io/post/draft_passed_20260901_174240_gua_maestra_2026_cmo_configurar_tu_age.html",
+            "articleSection": "Fintech & Ahorro",
+            "proficiencyLevel": "Expert",
+            "dependencies": "Linux, Docker Compose, Shell, Python",
+            "wordCount": 2268,
+            "inLanguage": "es"
+        }
+        </script>
+        
+</head>
+<body class="bg-[#0A0B0E] text-zinc-300 min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+
+    <!-- Universal Editorial Background Layers -->
+    <div class="editorial-backdrop"></div>
+    <div class="editorial-vignette"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="px-4 py-2.5 rounded-sm editorial-box text-white font-mono text-xs shadow-2xl flex items-center gap-2 border-neutral-700">
+            <span class="text-neutral-400">✓</span>
+            <span id="toastMsg">Copiado al portapapeles</span>
+        </div>
+    </div>
+
+    <!-- Editorial Top Utility Bar -->
+    <div class="border-b border-neutral-800/80 bg-[#08080B]/90 backdrop-blur-md text-neutral-400 font-mono text-[11px] py-1.5 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-neutral-400 font-semibold">SYSARCH LABS</span>
+                <span>•</span>
+                <span class="text-neutral-400">EDICIÓN 2026 // VOL. IV</span>
+                <span>•</span>
+                <span class="text-neutral-500 hidden md:inline">HOMELAB & SISTEMAS AUTÓNOMOS</span>
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1" title="Índice para Modelos de Lenguaje">
+                    <span>λ</span> <span>/llms.txt</span>
+                </a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" target="_blank" class="hover:text-white transition-colors" title="Corpus RAG Completo">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" target="_blank" class="hover:text-white transition-colors">RSS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publication Masthead / Header -->
+    <header class="border-b border-neutral-800 bg-[#0A0B0E]/80 backdrop-blur-md pt-8 pb-6 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <a href="https://jorgebd21.github.io/" class="group">
+                        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.06em] text-white group-hover:text-neutral-300 transition-colors uppercase">
+                            SYSARCH • HOMELAB JOURNAL
+                        </h1>
+                    </a>
+                    <p class="font-mono text-xs uppercase tracking-widest text-neutral-400 mt-1">
+                        Publicación Técnica de Arquitectura de Sistemas, Redes Zero-Trust e IA Local
+                    </p>
+                </div>
+
+                <div class="text-right hidden sm:block font-mono text-xs text-neutral-400 border-l border-neutral-800 pl-6">
+                    <p class="text-white font-semibold">COSTE CERO & ZERO-EXPOSURE</p>
+                    <p class="text-neutral-500 text-[11px] mt-0.5">Airgapped GitOps Publishing</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editorial Layout -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+        
+        <div class="max-w-[68ch] mx-auto">
+            <!-- Journal Navigation -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 pb-3 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+                <a href="https://jorgebd21.github.io/" class="hover:text-white flex items-center gap-1.5 transition-colors group">
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>Todas las publicaciones</span>
+                </a>
+                
+                <div class="flex items-center gap-3 self-end sm:self-auto">
+                    <a href="https://jorgebd21.github.io/post/draft_passed_20260901_174240_gua_maestra_2026_cmo_configurar_tu_age.md" target="_blank" class="hover:text-white transition-colors" title="Ver formato Markdown puro">
+                        λ .md raw
+                    </a>
+                    <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_174240_gua_maestra_2026_cmo_configurar_tu_age.md', 'URL Markdown copiada para IA')" class="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-all cursor-pointer active:scale-95" title="Copiar URL para ChatGPT / Claude">
+                        Copiar para IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Header -->
+            <header class="mb-10 pb-6 border-b-2 border-neutral-800">
+                <div class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                    Fintech & Ahorro // ANÁLISIS TÉCNICO
+                </div>
+
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+                    Guía Maestra 2026: Cómo Configurar tu Agente de Finanzas Autónomo para Eliminar Suscripciones Fantasma y Optimizar tus Gastos en Tiempo Real
+                </h1>
+
+                
+
+                <div class="mt-6 pt-4 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-neutral-400">
+                    <div>Por <span class="text-white font-semibold">Jorge Baeza</span></div>
+                    <div>01.09.2026 • 11 min de lectura (2,268 palabras)</div>
+                </div>
+            </header>
+
+            <!-- Google AdSense In-Article Slot -->
+            <div class="my-8 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Article Body (with Drop Cap on lead paragraph) -->
+            <article class="prose prose-invert max-w-none text-neutral-200">
+                <p class="editorial-lead text-neutral-200 font-body text-[17.5px] sm:text-[18.5px] leading-[1.85] mb-6">El coste oculto de las suscripciones digitales no utilizadas, o “suscripciones fantasma”, se ha disparado, con un usuario medio en la UE perdiendo hasta 45€ mensuales en servicios olvidados. Este drenaje financiero, exacerbado por la fragmentación de plataformas y la fatiga de gestión, ha catalizado el desarrollo de Agentes de Finanzas Autónomos. Estas herramientas, impulsadas por IA, prometen no solo rastrear, sino negociar y cancelar servicios basándose en el uso real, con un potencial de ahorro que puede superar el 25% del ingreso mensual. La clave reside en una configuración robusta y segura.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Conectando tu Agente de IA a las APIs Bancarias de Forma Segura: El Eslabón Crítico</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La piedra angular de cualquier agente financiero autónomo es su capacidad para interactuar con tus datos bancarios. En 2026, la madurez de las APIs de Open Banking (PSD2 en Europa, CDR en Australia, o iniciativas similares en otras regiones) y el estándar OAuth2 son nuestros aliados. <strong>Nunca, bajo ninguna circunstancia, debes introducir tus credenciales bancarias directamente en una aplicación de terceros.</strong> La seguridad se basa en el flujo de autorización delegado.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El proceso ideal implica un intermediario de confianza o, para los más puristas de la privacidad, un <em>gateway</em> auto-alojado.</p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Flujo de Autorización Seguro (OAuth2/Open Banking)</h3>
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Inicio de Conexión:</strong> Tu Agente de Finanzas (o su proveedor) te redirige al portal de tu banco.</li>
+<li><strong>Autenticación Bancaria:</strong> Te autenticas <em>directamente con tu banco</em> (usuario, contraseña, 2FA). El Agente nunca ve estas credenciales.</li>
+<li><strong>Consentimiento Explícito:</strong> El banco te presenta una pantalla donde autorizas al Agente a acceder a tipos específicos de datos (ej. saldos, transacciones de los últimos 90 días) y por un periodo limitado.</li>
+<li><strong>Redirección con Token:</strong> Tras tu consentimiento, el banco redirige tu navegador de vuelta al Agente, proporcionándole un <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">authorization code</code>.</li>
+<li><strong>Intercambio Seguro:</strong> El Agente utiliza este <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">authorization code</code> para solicitar un <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">access token</code> y un <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">refresh token</code> directamente al servidor de autorización del banco (sin tu intervención).</li>
+<li><strong>Acceso a Datos:</strong> El Agente usa el <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">access token</code> para realizar llamadas a las APIs bancarias y obtener tus datos financieros. El <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">refresh token</code> permite obtener nuevos <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">access tokens</code> cuando el actual caduca, sin requerir tu re-autenticación constante (pero siempre dentro de los límites de tu consentimiento original).</li>
+</ol>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Este modelo garantiza que tus credenciales bancarias permanezcan siempre en tu banco. El Agente solo recibe tokens de acceso de corta duración y revocables.</p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Despliegue de un Gateway de Agregación Auto-alojado (Opcional, para Máximo Control)</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para aquellos con conocimientos técnicos y una preocupación extrema por la privacidad, es posible auto-alojar un <em>gateway</em> de agregación que actúe como intermediario entre tus bancos y el Agente de Finanzas. Esto te permite tener control total sobre qué datos se extraen y cómo se anonimizan o procesan antes de enviarlos al Agente (especialmente útil si usas un Agente <em>cloud-based</em>).</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Un setup común en 2026 podría ser un mini-PC (ej. Intel N100/N305 o un Ryzen serie 8000/9000 de bajo consumo) ejecutando Proxmox 8, con una VM o un contenedor Docker para tu <em>gateway</em>.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">## Ejemplo de Docker Compose para un gateway de agregación simplificado (n8n con conectores Open Banking)
+## Este es un ejemplo conceptual; los conectores específicos dependerán de tu región y bancos.
+version: '3.8'
+services:
+  n8n:
+    image: n8n:latest
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=tu_password_segura
+      - N8N_EDITOR_BASE_URL=http://localhost:5678/
+      # Configuración para conectores Open Banking (ej. Nordigen, Salt Edge, o custom)
+      # Esto requeriría credenciales de desarrollador de estas plataformas o de los bancos directamente.
+      - N8N_CUSTOM_NODE_NORDIGEN_CLIENT_ID=your_nordigen_client_id
+      - N8N_CUSTOM_NODE_NORDIGEN_SECRET_KEY=your_nordigen_secret_key
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - internal_network
+
+  # Opcional: Base de datos PostgreSQL para persistencia de datos si n8n no es suficiente
+  # postgres:
+  #   image: postgres:16
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_DB=n8n_db
+  #     - POSTGRES_USER=n8n_user
+  #     - POSTGRES_PASSWORD=n8n_password
+  #   volumes:
+  #     - pg_data:/var/lib/postgresql/data
+  #   networks:
+  #     - internal_network
+
+volumes:
+  n8n_data:
+  # pg_data:
+
+networks:
+  internal_network:
+    driver: bridge</code></pre></div>
+Este <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code> te permite ejecutar n8n (una herramienta de automatización de código abierto) que puede ser configurada con nodos personalizados para interactuar con APIs de Open Banking. Tú controlarías el flujo de datos y la exposición final al Agente de Finanzas. La conexión a tu red doméstica de 2.5GbE o 10GbE (si tienes un NAS potente) asegura que el rendimiento no sea un cuello de botella.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Comparativa 2026: Agentes de Finanzas Autónomos Líderes</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El mercado de Agentes de Finanzas ha madurado considerablemente. En 2026, tres nombres destacan por su enfoque y capacidades. La elección depende de tu tolerancia al riesgo, tu presupuesto y tu nivel de exigencia en privacidad.</p>
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm"><table class="w-full text-left border-collapse text-[13.5px]">
+<thead class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<tr>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">Característica</th>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">SentinelGuard AI</th>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">OptiSpend Pro</th>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">HyperSave Bot</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Enfoque Principal</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Privacidad y control granular.</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Equilibrio entre ahorro y usabilidad.</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Máximo ahorro agresivo y automatización total.</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Seguridad Datos</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Cifrado E2E, procesamiento local opcional.</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Cifrado robusto, anonimización en la nube.</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Cifrado estándar, mayor uso de datos para IA.</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Capacidad Ahorro</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Moderada (requiere más supervisión).</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Alta (negociación activa, optimización de planes).</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Muy Alta (cambios frecuentes, ofertas agresivas).</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Integraciones</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Open Banking, APIs de servicios populares.</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Amplia gama (bancos, SaaS, streaming, telcos).</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">La más extensa, incluyendo mercados P2P.</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Control Humano</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Alto (aprobación por defecto para acciones).</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Medio (notificaciones, opciones de veto).</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Bajo (automatización por defecto, veto manual).</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Modelo de Precios</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Suscripción fija, versión <em>self-hosted</em> gratis.</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Suscripción mensual (tier basado en ahorro).</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">% del ahorro generado (modelo de éxito).</td>
+</tr>
+</tbody>
+</table></div>
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>SentinelGuard AI:</strong> Ideal para usuarios que valoran la privacidad por encima de todo. Permite un mayor control sobre qué datos se comparten y cómo se utilizan. Su capacidad de ahorro es buena, pero requiere más intervención manual para confirmar acciones. Ofrece componentes <em>self-hosted</em> para procesar datos localmente antes de enviarlos a su IA.</li>
+<li><strong>OptiSpend Pro:</strong> El punto dulce para la mayoría. Ofrece una excelente capacidad de ahorro gracias a su IA avanzada que negocia activamente y optimiza planes, sin comprometer excesivamente la privacidad. Su interfaz es intuitiva y sus notificaciones son claras.</li>
+<li><strong>HyperSave Bot:</strong> Para el usuario que quiere delegar al máximo y prioriza el ahorro agresivo. Su IA es la más avanzada en la identificación de oportunidades, pero esto a menudo implica cambios más frecuentes y una menor supervisión humana por defecto. Es el que más datos consume para alimentar sus modelos predictivos.</li>
+</ul>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Casos Reales de Optimización: Reduciendo el Coste de Vida Digital en 200€/Mes</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La promesa de ahorro no es una quimera. Con una configuración adecuada, un Agente de Finanzas Autónomo puede identificar y ejecutar optimizaciones que, sumadas, representan una reducción significativa de tus gastos mensuales.</p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Ejemplo 1: Streaming y Entretenimiento (Ahorro ~30-50€/mes)</h3>
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Problema:</strong> Suscripciones a 4-5 servicios de streaming (Netflix, Disney+, HBO Max, Prime Video, Spotify Premium) que no se usan simultáneamente o de forma constante.</li>
+<li><strong>Acción del Agente:</strong><ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Monitorización:</strong> El Agente (ej. OptiSpend Pro) analiza tus hábitos de consumo (integración con APIs de Smart TV, historial de reproducción de apps).</li>
+<li><strong>Optimización:</strong> Si detecta que no has usado Disney+ en 3 semanas, sugiere pausar la suscripción o cambiar a un plan con anuncios. Si usas Spotify solo para podcasts, sugiere cambiar a un plan gratuito con anuncios o un servicio de podcasts dedicado.</li>
+<li><strong>Ejecución:</strong> Con tu aprobación (o automáticamente si está configurado), el Agente interactúa con la API del servicio para pausar/cancelar/cambiar el plan.</li>
+</ul>
+</li>
+<li><strong>Resultado:</strong> Ahorro de 10-15€ por servicio no utilizado o sub-utilizado.</li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Ejemplo 2: Almacenamiento en la Nube y SaaS (Ahorro ~50-80€/mes)</h3>
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Problema:</strong> Múltiples servicios de almacenamiento (Google Drive, Dropbox, OneDrive, iCloud) con planes de pago, licencias de SaaS (Adobe Creative Cloud, Microsoft 365, herramientas de desarrollo) que no se usan a su máxima capacidad o están duplicados.</li>
+<li><strong>Acción del Agente:</strong><ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Análisis de Uso:</strong> El Agente (ej. SentinelGuard AI con componentes locales) escanea el uso real de espacio en la nube y la actividad de las licencias SaaS.</li>
+<li><strong>Identificación:</strong> Detecta que solo usas el 30% de tu plan de 2TB de Google Drive o que tienes dos licencias de un software de edición de vídeo.</li>
+<li><strong>Recomendación/Acción:</strong> Sugiere consolidar almacenamiento, downgradear planes o cancelar licencias redundantes. Para datos antiguos, podría sugerir moverlos a un almacenamiento de archivo frío (ej. AWS S3 Glacier Deep Archive o Google Cloud Archive) si tienes una cuenta de desarrollador.</li>
+</ul>
+</li>
+<li><strong>Resultado:</strong> Reducción de planes de almacenamiento, cancelación de licencias SaaS no utilizadas.</li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Ejemplo 3: Telefonía Móvil e Internet (Ahorro ~70-100€/mes)</h3>
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Problema:</strong> Planes de datos móviles o de internet doméstico sobredimensionados, o no optimizados para ofertas actuales.</li>
+<li><strong>Acción del Agente:</strong><ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Monitorización de Consumo:</strong> El Agente (ej. HyperSave Bot) monitoriza tu consumo de datos móviles y ancho de banda de internet en tiempo real (integración con APIs de operadoras o routers compatibles).</li>
+<li><strong>Comparativa de Mercado:</strong> Rastrea constantemente las ofertas de los principales proveedores de telecomunicaciones en tu área.</li>
+<li><strong>Negociación/Cambio:</strong> Si tu consumo de datos móviles es consistentemente bajo, el Agente podría negociar con tu operadora un plan más económico o sugerir un cambio a un operador virtual. Si tu internet doméstico es de 1Gbps pero solo usas 200Mbps, podría sugerir un downgrade o buscar ofertas de la competencia.</li>
+</ul>
+</li>
+<li><strong>Resultado:</strong> Cambio a planes más ajustados al uso real, aprovechamiento de ofertas promocionales.</li>
+</ul>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Sumando estos ejemplos, un ahorro de 200€ mensuales es perfectamente alcanzable para un usuario medio con un ecosistema digital extenso.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">El Peligro de la Automatización Total: Errores Comunes y Límites de Control Manual</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Delegar el control financiero a una IA es potente, pero no exento de riesgos. La automatización total, sin supervisión, puede llevar a situaciones indeseadas.</p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Errores Comunes al Delegar el Pago de Facturas a la IA:</h3>
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Cancelación de Servicios Críticos:</strong> La IA, en su afán de optimizar, podría cancelar una suscripción esencial (ej. tu VPN de seguridad, tu software de contabilidad, o incluso un seguro) si detecta un uso bajo o una alternativa más barata, sin entender el contexto crítico.</li>
+<li><strong>Interrupción de Servicios por Cambios Agresivos:</strong> Un Agente configurado para el “máximo ahorro” podría cambiar tu plan de internet o móvil con demasiada frecuencia para aprovechar ofertas, resultando en interrupciones temporales del servicio durante la migración.</li>
+<li><strong>Impacto en la Puntuación Crediticia:</strong> Si el Agente cancela un pago automático de una tarjeta de crédito o un préstamo para “optimizar” el flujo de caja, podría generar cargos por mora o afectar negativamente tu historial crediticio.</li>
+<li><strong>Falta de Transparencia y Auditoría:</strong> Sin un registro claro de las acciones de la IA, puede ser difícil entender por qué se tomó una decisión o auditar el impacto real en tus finanzas.</li>
+<li><strong>Vulnerabilidades de Seguridad:</strong> Un Agente mal configurado o comprometido podría exponer tus datos financieros o realizar transacciones no autorizadas.</li>
+</ol>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Cómo Establecer Límites de Control Manual:</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La clave es un equilibrio entre automatización y supervisión humana.</p>
+<ul class="my-6 space-y-2.5 list-disc list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Aprobación por Defecto (Whitelist):</strong> Configura tu Agente para que <em>todas</em> las acciones de cancelación o cambio de plan requieran tu aprobación explícita, a menos que añadas un servicio a una “lista blanca” de automatización total.</li>
+<li><strong>Umbrales de Gasto y Ahorro:</strong> Establece límites. Por ejemplo, “no cancelar ningún servicio que cueste más de X€/mes sin mi aprobación” o “solo cambiar de plan si el ahorro es superior a Y€/mes”.</li>
+<li><strong>Categorías de Servicios Protegidos:</strong> Define categorías de servicios (ej. “Seguros”, “Salud”, “Educación”, “Seguridad IT”) que nunca deben ser tocados por la IA sin tu permiso explícito.</li>
+<li><strong>Notificaciones Detalladas:</strong> Exige que el Agente te envíe notificaciones claras y detalladas antes de cualquier acción propuesta, explicando el motivo, el ahorro estimado y el impacto potencial.</li>
+<li><strong>Modo “Solo Sugerencias”:</strong> Para empezar, puedes configurar el Agente en un modo pasivo donde solo te haga recomendaciones, sin ejecutar ninguna acción. Una vez que ganes confianza, puedes ir habilitando la automatización gradual.</li>
+<li><strong>Revisión Periódica:</strong> Programa revisiones mensuales o trimestrales de las acciones de tu Agente. Utiliza sus paneles de control para auditar qué ha hecho, qué ha ahorrado y si ha habido algún efecto secundario.</li>
+<li><strong>Autenticación Multifactor (MFA) para Acciones Críticas:</strong> Si tu Agente permite acciones directas (ej. iniciar una transferencia), asegúrate de que estas requieran una segunda capa de autenticación (ej. código SMS, app de autenticación).</li>
+</ul>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La automatización es una herramienta, no un sustituto de la responsabilidad financiera. Úsala con inteligencia y establece tus propias barreras de seguridad.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para tu Despliegue de Agente de Finanzas</h2>
+<ol class="my-6 space-y-2.5 list-decimal list-outside pl-6 text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Evaluación de Necesidades:</strong> ¿Priorizas privacidad, ahorro máximo o facilidad de uso? Esto guiará tu elección de Agente.</li>
+<li><strong>Selección del Agente:</strong> Basándote en la comparativa, elige entre SentinelGuard AI, OptiSpend Pro o HyperSave Bot (o alternativas similares que surjan en 2026).</li>
+<li><strong>Configuración de Seguridad:</strong> Conecta tu Agente a tus bancos utilizando el flujo OAuth2/Open Banking. Considera un <em>gateway</em> auto-alojado si la privacidad es crítica. Asegúrate de que tu red doméstica (2.5GbE/10GbE) sea robusta para cualquier componente local.</li>
+<li><strong>Definición de Límites:</strong> Establece tus reglas de control manual: umbrales de gasto, categorías protegidas, modo de aprobación.</li>
+<li><strong>Integración de Servicios:</strong> Conecta el Agente a tus plataformas de streaming, almacenamiento en la nube, SaaS, y operadoras de telecomunicaciones (si el Agente lo soporta y tienes las credenciales de API o flujos OAuth).</li>
+<li><strong>Monitorización y Ajuste:</strong> Inicia en modo “solo sugerencias” si es posible. Monitoriza las recomendaciones y acciones del Agente. Ajusta los límites y las reglas a medida que ganes confianza.</li>
+<li><strong>Revisión Periódica:</strong> Dedica tiempo cada mes a revisar el informe de tu Agente. Entiende el impacto y afina su comportamiento.</li>
+</ol>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Con una implementación cuidadosa y una supervisión activa, tu Agente de Finanzas Autónomo se convertirá en un aliado invaluable para optimizar tus gastos y eliminar el lastre de las suscripciones fantasma.</p>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<div class="mt-12 pt-4 border-t border-neutral-900 text-[10.5px] text-neutral-600 font-mono italic tracking-tight">Disclosure:</div>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*</p>
+            </article>
+
+            <!-- Google AdSense Bottom Slot -->
+            <div class="my-12 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Editorial Ingestion Box for LLMs -->
+            <div class="mt-12 p-5 rounded-sm editorial-box border border-neutral-800 text-xs font-mono text-neutral-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-white font-bold">λ INTEROPERABILIDAD PARA MODELOS DE LENGUAJE</span>
+                        <p class="mt-1 text-neutral-400">Texto plano indexable sin marcado HTML para ChatGPT, Claude y Perplexity.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_174240_gua_maestra_2026_cmo_configurar_tu_age.md', 'URL copiada')" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-colors cursor-pointer">
+                            Copiar URL .md
+                        </button>
+                        <a href="https://jorgebd21.github.io/post/draft_passed_20260901_174240_gua_maestra_2026_cmo_configurar_tu_age.md" target="_blank" class="px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-sm transition-colors">
+                            Ver .md
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="border-t-2 border-neutral-800 bg-[#07080B]/90 backdrop-blur-md mt-20 py-12 text-neutral-500 text-xs font-mono relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <p class="text-white font-serif text-base font-bold tracking-wide uppercase">SYSARCH • HOMELAB JOURNAL</p>
+                <p class="text-neutral-500 text-xs mt-1">Investigación en Sistemas, Redes Privadas e IA • Dirigido por Jorge Baeza</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" class="hover:text-white transition-colors">/llms.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" class="hover:text-white transition-colors">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/sitemap.xml" class="hover:text-white transition-colors">Sitemap</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" class="hover:text-white transition-colors">Feed RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Script -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const m = document.getElementById('toastMsg');
+            m.innerText = msg;
+            t.classList.remove('hidden', 'toast-animate');
+            void t.offsetWidth;
+            t.classList.add('toast-animate');
+            setTimeout(() => { t.classList.add('hidden'); }, 2200);
+        }
+
+        function copyCode(btn) {
+            const card = btn.closest('.code-block');
+            const code = card.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const span = btn.querySelector('span');
+                const orig = span.innerText;
+                span.innerText = 'Copiado';
+                btn.classList.add('text-white', 'bg-neutral-700');
+                showToast('Bloque copiado');
+                setTimeout(() => {
+                    span.innerText = orig;
+                    btn.classList.remove('text-white', 'bg-neutral-700');
+                }, 2000);
+            });
+        }
+
+        function copyToClipboard(text, customMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(customMsg || 'Copiado al portapapeles');
+            });
+        }
+
+        // Shortcut: '/' or 'Cmd+K' to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.focus();
+                    search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
