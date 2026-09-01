@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026</title>
+    <meta name="description" content="Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada vez que pides encender la luz del despacho, tu arquitectura doméstica está desfasada. La actualización del núcleo de Home Assistant con soporte nativo para NPUs (Unidades de Procesamiento Neural) ha cambiado el equilibrio entre la nube y el procesamiento local.">
+    
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026">
+    <meta property="og:description" content="Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada vez que pides encender la luz del despacho, tu arquitectura doméstica está desfasada. La actualización del núcleo de Home Assistant con soporte nativo para NPUs (Unidades de Procesamiento Neural) ha cambiado el equilibrio entre la nube y el procesamiento local.">
+    <meta property="og:url" content="https://jorgebd21.github.io">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect Google Fonts for Editorial Press (Newsreader + Lora + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        body: ['"Lora"', 'Charter', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Editorial Typography & Universal Background Styles -->
+    <style>
+        body {
+            background-color: #0A0B0E;
+            color: #D4D4D8;
+            font-family: 'Lora', Charter, Georgia, serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .font-serif { font-family: 'Newsreader', Georgia, serif; }
+        .font-body { font-family: 'Lora', Charter, Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Universal Editorial Press Background Across ALL Pages */
+        .editorial-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../assets/editorial_bg.jpg'), url('/assets/editorial_bg.jpg'), url('https://jorgebd21.github.io/assets/editorial_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.16;
+            filter: contrast(135%) brightness(105%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .editorial-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(10, 11, 14, 0.35) 0%, rgba(10, 11, 14, 0.80) 65%, #0A0B0E 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Classic Editorial Drop Cap */
+        .editorial-lead::first-letter {
+            font-family: 'Newsreader', Georgia, serif;
+            float: left;
+            font-size: 3.85em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Subtle borders and paper feel */
+        .editorial-box {
+            background-color: rgba(15, 16, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .editorial-divider {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Clean Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0B0E; }
+        ::-webkit-scrollbar-thumb { background: #272A36; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4354; }
+
+        /* Toast animation */
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .toast-animate { animation: toastFade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+
+    <!-- Google AdSense Official Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9111135660504315" crossorigin="anonymous"></script>
+
+    <!-- LLM Autodiscovery & RSS -->
+    <link rel="alternate" type="text/plain" href="https://jorgebd21.github.io/llms.txt" title="LLM Context Index">
+    <link rel="alternate" type="application/rss+xml" href="https://jorgebd21.github.io/feed.xml" title="RSS Feed">
+    
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen",
+            "description": "Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada vez que pides encender la luz del despacho, tu arquitectura doméstica está desfasada. La actualización del núcleo de Home Assistant con soporte nativo para NPUs (Unidades de Procesamiento Neural) ha cambiado el equilibrio entre la nube y el procesamiento local.",
+            "author": { "@type": "Person", "name": "Jorge Baeza" },
+            "publisher": { "@type": "Organization", "name": "SYSARCH • HOMELAB JOURNAL" },
+            "datePublished": "2026-09-01",
+            "mainEntityOfPage": "https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.html",
+            "articleSection": "Inteligencia Artificial",
+            "wordCount": 1835,
+            "inLanguage": "es"
+        }
+        </script>
+        
+</head>
+<body class="bg-[#0A0B0E] text-zinc-300 min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+
+    <!-- Universal Editorial Background Layers -->
+    <div class="editorial-backdrop"></div>
+    <div class="editorial-vignette"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="px-4 py-2.5 rounded-sm editorial-box text-white font-mono text-xs shadow-2xl flex items-center gap-2 border-neutral-700">
+            <span class="text-neutral-400">✓</span>
+            <span id="toastMsg">Copiado al portapapeles</span>
+        </div>
+    </div>
+
+    <!-- Editorial Top Utility Bar -->
+    <div class="border-b border-neutral-800/80 bg-[#08080B]/90 backdrop-blur-md text-neutral-400 font-mono text-[11px] py-1.5 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-neutral-400 font-semibold">SYSARCH LABS</span>
+                <span>•</span>
+                <span class="text-neutral-400">EDICIÓN 2026 // VOL. IV</span>
+                <span>•</span>
+                <span class="text-neutral-500 hidden md:inline">HOMELAB & SISTEMAS AUTÓNOMOS</span>
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1" title="Índice para Modelos de Lenguaje">
+                    <span>λ</span> <span>/llms.txt</span>
+                </a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" target="_blank" class="hover:text-white transition-colors" title="Corpus RAG Completo">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" target="_blank" class="hover:text-white transition-colors">RSS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publication Masthead / Header -->
+    <header class="border-b border-neutral-800 bg-[#0A0B0E]/80 backdrop-blur-md pt-8 pb-6 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <a href="https://jorgebd21.github.io/" class="group">
+                        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.06em] text-white group-hover:text-neutral-300 transition-colors uppercase">
+                            SYSARCH • HOMELAB JOURNAL
+                        </h1>
+                    </a>
+                    <p class="font-mono text-xs uppercase tracking-widest text-neutral-400 mt-1">
+                        Publicación Técnica de Arquitectura de Sistemas, Redes Zero-Trust e IA Local
+                    </p>
+                </div>
+
+                <div class="text-right hidden sm:block font-mono text-xs text-neutral-400 border-l border-neutral-800 pl-6">
+                    <p class="text-white font-semibold">COSTE CERO & ZERO-EXPOSURE</p>
+                    <p class="text-neutral-500 text-[11px] mt-0.5">Airgapped GitOps Publishing</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editorial Layout -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+        
+        <div class="max-w-[68ch] mx-auto">
+            <!-- Journal Navigation -->
+            <div class="flex items-center justify-between gap-4 mb-8 pb-3 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+                <a href="https://jorgebd21.github.io/" class="hover:text-white flex items-center gap-1.5 transition-colors group">
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>Todas las publicaciones</span>
+                </a>
+                
+                <div class="flex items-center gap-3">
+                    <a href="https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.md" target="_blank" class="hover:text-white transition-colors" title="Ver formato Markdown puro">
+                        λ .md raw
+                    </a>
+                    <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.md', 'URL Markdown copiada para IA')" class="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-all cursor-pointer active:scale-95" title="Copiar URL para ChatGPT / Claude">
+                        Copiar para IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Header -->
+            <header class="mb-10 pb-6 border-b-2 border-neutral-800">
+                <div class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                    Inteligencia Artificial // ANÁLISIS TÉCNICO
+                </div>
+
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+                    Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen
+                </h1>
+
+                <p class="font-serif italic text-lg sm:text-xl text-neutral-300 mt-4 leading-relaxed border-l-2 border-neutral-500 pl-4 py-1">Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada ...</p>
+
+                <div class="mt-6 pt-4 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-neutral-400">
+                    <div>Por <span class="text-white font-semibold">Jorge Baeza</span></div>
+                    <div>01.09.2026 • 9 min de lectura (1,835 palabras)</div>
+                </div>
+            </header>
+
+            <!-- Google AdSense In-Article Slot -->
+            <div class="my-8 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Article Body (with Drop Cap on lead paragraph) -->
+            <article class="prose prose-invert max-w-none text-neutral-200">
+                <h1 class="font-serif text-3xl sm:text-4xl font-bold text-white mt-12 mb-6 tracking-normal">Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen</h1>
+
+<p class="editorial-lead text-neutral-200 font-body text-[17.5px] sm:text-[18.5px] leading-[1.85] mb-6">Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada vez que pides encender la luz del despacho, tu arquitectura doméstica está desfasada. La actualización del núcleo de Home Assistant con soporte nativo para NPUs (Unidades de Procesamiento Neural) ha cambiado el equilibrio entre la nube y el procesamiento local.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Hoy es posible ejecutar agentes de voz contextuales, procesamiento de vídeo en tiempo real para cámaras de seguridad y modelos de lenguaje de 3 a 8 mil millones de parámetros dentro de tu red local, sin enviar un solo byte al exterior y manteniendo un consumo eléctrico inferior a los 15 vatios en reposo operativo.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Qué es una NPU en 2026 y por qué revienta la regla del consumo energético</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Durante años, ejecutar un modelo de lenguaje (LLM) o un sistema de reconocimiento de voz local requería una tarjeta gráfica dedicada. Una GPU consumía entre 150W y 350W para mantener cargados los pesos del modelo en su VRAM y ejecutar operaciones matriciales de coma flotante. Para un servidor encendido 24/7, la factura de la luz invalidaba cualquier ahorro frente a las suscripciones cloud.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La NPU integrada en los procesadores de 2026 (como los chips AMD Ryzen serie 8000/9000 o Intel Core Ultra) cambia la arquitectura de cálculo. A diferencia de una CPU diseñada para ejecución secuencial versátil o una GPU diseñada para cálculo paralelo masivo sin importar el consumo, la NPU es un ASIC (Circuito Integrado de Aplicación Específica) optimizado exclusivamente para operaciones de multiplicación e acumulación de matrices (MAC) con precisión reducida (INT8 e INT4).</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">[ Servidor Local - Mini PC (<15W) ]<br>   +-------------------------------------------------------+<br><div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm"><br><table class="w-full text-left border-collapse text-[13.5px]"><br><thead><tr class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider"><br><th class="px-5 py-3 font-semibold">[NPU Integrada] <---> [RAM Unificada DDR5 Dual-Ch]</th><br></tr></thead><tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body"><br><tr class="hover:bg-neutral-800/30 transition-colors"><br><td class="px-5 py-3 leading-relaxed">v</td><br></tr><br><tr class="hover:bg-neutral-800/30 transition-colors"><br><td class="px-5 py-3 leading-relaxed">[Ollama / LocalAI Engine]</td><br></tr><br><tr class="hover:bg-neutral-800/30 transition-colors"><br><td class="px-5 py-3 leading-relaxed"></td><br><td class="px-5 py-3 leading-relaxed"></td><br></tr><br><tr class="hover:bg-neutral-800/30 transition-colors"><br><td class="px-5 py-3 leading-relaxed">v</td><br></tr><br><tr class="hover:bg-neutral-800/30 transition-colors"><br><td class="px-5 py-3 leading-relaxed">[Home Assistant Core] <---> [Dispositivos Zigbee/IP]</td><br></tr><br></tbody></table></div><br>   +-------------------------------------------------------+</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Al cuantizar modelos como Llama-3.2-3B, Mistral-Small o Phi-4 a formato INT4, los pesos caben en la memoria RAM del sistema sin perder precisión semántica perceptible en tareas domóticas. La NPU procesa estas matrices mediante un flujo de datos continuo que no pasa por la caché tradicional de la CPU, reduciendo la disipación térmica. El resultado práctico es una velocidad de inferencia de 25 a 40 tokens por segundo con un consumo de chip de solo 8W a 12W, permitiendo que un Mini PC de formato 4x4 pulgadas funcione de manera totalmente silenciosa.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Errores fatales de hardware: RAM y NVMe bajo la lupa</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Comprar el Mini PC equivocado destruirá la latencia de tu sistema, independientemente de los TOPS (Tera Operations Per Second) que anuncie el fabricante en la caja. En la inferencia local de IA, el factor limitante casi nunca es la velocidad bruta del chip, sino el ancho de banda de la memoria.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. El cuello de botella de la arquitectura de RAM</h3>
+Los modelos de IA leen la totalidad de sus pesos guardados en memoria por cada token que generan. Si tu Mini PC tiene un único módulo de memoria (Single-Channel), el ancho de banda se reduce a la mitad.
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">* <strong class="text-white font-semibold">Configuración deficiente:</strong> 1x 16GB DDR5 a 4800 MHz = ~38,4 GB/s de ancho de banda. Velocidad estimada: 5-8 tokens/segundo.<br>* <strong class="text-white font-semibold">Configuración óptima:</strong> 2x 16GB DDR5 a 5600 MHz (Dual-Channel) = ~89,6 GB/s de ancho de banda. Velocidad estimada: 25-35 tokens/segundo.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Elegir una placa con memoria soldada en monocanal o escatimar en un segundo módulo de RAM transforma una respuesta instantánea en una espera molesta.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. El SSD NVMe y la carga de modelos</h3>
+Cuando Home Assistant invoca un modelo específico para procesar una petición compleja o cuando Whisper analiza un clip de audio, el modelo debe leerse del disco a la memoria si no está fijado en RAM. Un SSD NVMe barato sin DRAM y de tipo QLC caerá en velocidades de lectura aleatoria y sostenida por debajo de los 300 MB/s tras unos segundos de carga. Necesitas unidades PCIe 4.0 x4 con memoria caché DRAM dedicada (con lecturas secuenciales superiores a 5000 MB/s) para que la inicialización de los pipelines de IA sea imperceptible.
+
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm">
+<table class="w-full text-left border-collapse text-[13.5px]">
+<thead><tr class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<th class="px-5 py-3 font-semibold">Configuración Hardware</th>
+<th class="px-5 py-3 font-semibold">Ancho de Banda Memoria</th>
+<th class="px-5 py-3 font-semibold">Rendimiento Estimado</th>
+<th class="px-5 py-3 font-semibold">Impacto en Domótica</th>
+</tr></thead><tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Celeron/N100 (DDR4 Single)</td>
+<td class="px-5 py-3 leading-relaxed">17,0 GB/s</td>
+<td class="px-5 py-3 leading-relaxed">2-4 tokens/s</td>
+<td class="px-5 py-3 leading-relaxed">Inviable para voz en tiempo real</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Ryzen 7 / DDR5 Single-Channel</td>
+<td class="px-5 py-3 leading-relaxed">38,4 GB/s</td>
+<td class="px-5 py-3 leading-relaxed">8-12 tokens/s</td>
+<td class="px-5 py-3 leading-relaxed">Latencia alta (2-3 segundos)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Core Ultra 5 / DDR5 Dual-Channel</td>
+<td class="px-5 py-3 leading-relaxed">89,6 GB/s</td>
+<td class="px-5 py-3 leading-relaxed">28-35 tokens/s</td>
+<td class="px-5 py-3 leading-relaxed">Respuesta fluida (<0,5 segundos)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Ryzen 9 / LPDDR5x Dual-Channel</td>
+<td class="px-5 py-3 leading-relaxed">120,0+ GB/s</td>
+<td class="px-5 py-3 leading-relaxed">40-50 tokens/s</td>
+<td class="px-5 py-3 leading-relaxed">Experiencia idéntica a la nube</td>
+</tr>
+</tbody></table></div>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Guía paso a paso: Despliegue de la pila domótica e IA local en 45 minutos</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Asumiendo que dispones de un Mini PC barebone con un chip con NPU integrada (como el AMD Ryzen 7 8845HS o Intel Core Ultra 5 125H) con 32GB de RAM DDR5 en dual-channel y un SSD NVMe PCIe 4.0 de 1TB.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 1: Sistema Base y Drivers NPU (10 minutos)</h3>
+Instala Debian 12 o Ubuntu Server 24.04 LTS en el Mini PC. Asegúrate de actualizar el kernel a la versión más reciente para contar con los controladores de aceleración neuronal cargados en el sistema operativo.
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">bash<br><h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Actualización e instalación de dependencias base</h2><br>sudo apt update && sudo apt upgrade -y<br>sudo apt install -y curl git build-essential linux-headers-$(uname -r)</p>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Verificar que el kernel detecta el subsistema de aceleración</h2>
+ls -l /dev/accel/<em class="text-neutral-300 italic font-serif"> /dev/dri/</em>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Si el comando devuelve dispositivos como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/accel/accel0</code> o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/dri/renderD128</code>, el kernel ha inicializado correctamente el hardware de la NPU y la GPU integrada.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 2: Despliegue de la Pila con Docker Compose (15 minutos)</h3>
+Crea una estructura de directorios en tu usuario para gestionar los contenedores. Utilizaremos Home Assistant Supervised/Core junto a un motor de inferencia optimizado para NPU mediante runtime OpenVINO/ONNX y el stack de voz privado (Faster-Whisper y Piper).
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Crea el archivo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code>:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">yaml<br>version: '3.8'</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">services:<br>  homeassistant:<br>    container_name: homeassistant<br>    image: ghcr.io/home-assistant/home-assistant:stable<br>    volumes:<br>      - ./ha-config:/config<br>      - /etc/localtime:/etc/localtime:ro<br>      - /run/dbus:/run/dbus:ro<br>    restart: unless-stopped<br>    privileged: true<br>    network_mode: host</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">npu-inference-engine:<br>    container_name: npu-engine<br>    image: ollama/ollama:latest<br>    ports:<br>      - "11434:11434"<br>    environment:<br>      - OLLAMA_NUM_PARALLEL=2<br>      - OLLAMA_KEEP_ALIVE=24h<br>    devices:<br>      - /dev/dri:/dev/dri<br>      - /dev/accel/accel0:/dev/accel/accel0<br>    volumes:<br>      - ./ollama-data:/root/.ollama<br>    restart: unless-stopped</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">whisper-npu:<br>    container_name: whisper-npu<br>    image: rhasspy/wyoming-faster-whisper:latest<br>    command: --model small --language es --beam-size 1<br>    volumes:<br>      - ./whisper-data:/data<br>    ports:<br>      - "10300:10300"<br>    devices:<br>      - /dev/dri:/dev/dri<br>    restart: unless-stopped</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">piper-tts:<br>    container_name: piper-tts<br>    image: rhasspy/wyoming-piper:latest<br>    command: --voice es_ES-dave-medium<br>    volumes:<br>      - ./piper-data:/data<br>    ports:<br>      - "10200:10200"<br>    restart: unless-stopped</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Levanta el stack con:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">bash<br>docker compose up -d</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 3: Carga del Modelo Optimizado INT4 (10 minutos)</h3>
+Con la pila ejecutándose, descarga un modelo cuantizado específicamente preparado para la ejecución de instrucciones domóticas en NPU.
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">bash<br>docker exec -it npu-engine ollama run llama3.2:3b-instruct-q4_K_M</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Este modelo ocupa apenas 2,0 GB de memoria RAM y procesa intenciones estructuradas en formato JSON con precisión absoluta.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 4: Vinculación con Home Assistant (10 minutos)</h3>
+1. Entra en tu panel de Home Assistant (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://IP_DE_TU_MINIPC:8123</code>).
+2. Ve a <strong class="text-white font-semibold">Ajustes</strong> -> <strong class="text-white font-semibold">Dispositivos y servicios</strong> -> <strong class="text-white font-semibold">Añadir integración</strong>.
+3. Añade la integración <strong class="text-white font-semibold">Wyoming Protocol</strong> dos veces:
+   * Para Whisper: IP local, Puerto <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">10300</code>.
+   * Para Piper: IP local, Puerto <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">10200</code>.
+4. Añade la integración <strong class="text-white font-semibold">Conversation / Ollama</strong>:
+   * URL: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://localhost:11434</code>
+   * Modelo: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">llama3.2:3b-instruct-q4_K_M</code>
+   * Prompt del sistema: Configura el agente para que responda de forma concisa y controle las entidades de tu casa.
+5. Ve a <strong class="text-white font-semibold">Ajustes</strong> -> <strong class="text-white font-semibold">Voz y Asistentes</strong> y crea un pipeline combinando Wyoming Whisper (STT), Ollama (Agente) y Wyoming Piper (TTS).
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Prueba el sistema desde la aplicación móvil o un satélite M5Stack ESP32: la transcripción, decisión y respuesta hablada se ejecutarán localmente en menos de 600 milisegundos.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Comparativa de coste real: Mini PC ($300) frente a la Nube (3 años)</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El cálculo financiero a la hora de desplegar infraestructura propia no debe limitarse al precio de compra del hardware. Debe compararse el Coste Total de Propiedad (TCO) contra los servicios equivalentes en la nube a lo largo de un ciclo de vida operativo razonable de 36 meses.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Servicios en la nube sustituidos:</h3>
+1. <strong class="text-white font-semibold">Home Assistant Cloud (Nabu Casa):</strong> Necesario para control remoto sencillo y conectividad de voz externa (~75 €/año).
+2. <strong class="text-white font-semibold">Suscripción IA Generativa / APIs:</strong> OpenAI ChatGPT Plus o consumo de API equivalente para agentes inteligentes e integración con sistemas de cámara (~240 €/año).
+3. <strong class="text-white font-semibold">Procesamiento de Vídeo Inteligente (Cloud VMS):</strong> Suscripciones tipo Ring/Nest para detección de objetos mediante IA en 3 cámaras (~120 €/año).
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Consumo Eléctrico del Mini PC:</h3>
+* Consumo promedio en reposo activo (Home Assistant + NPU en espera): 9 Vatios.
+* Consumo pico durante inferencia (5% del día): 25 Vatios.
+* Promedio ponderado: 10,2 Vatios/hora.
+* Consumo anual: 89,35 kWh.
+* Precio medio del kWh (2026): ~0,20 €.
+* <strong class="text-white font-semibold">Coste eléctrico anual: ~17,87 €</strong>.
+
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm">
+<table class="w-full text-left border-collapse text-[13.5px]">
+<thead><tr class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<th class="px-5 py-3 font-semibold">Concepto</th>
+<th class="px-5 py-3 font-semibold">Solución Cloud (3 Años)</th>
+<th class="px-5 py-3 font-semibold">Mini PC con NPU Local (3 Años)</th>
+</tr></thead><tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Hardware Inicial</td>
+<td class="px-5 py-3 leading-relaxed">0 €</td>
+<td class="px-5 py-3 leading-relaxed">300 € (Mini PC Barebone + RAM + SSD)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Licencias / Suscripciones</td>
+<td class="px-5 py-3 leading-relaxed">1.305 € (HA Cloud + API LLM + VMS)</td>
+<td class="px-5 py-3 leading-relaxed">0 € (Software Open Source)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Coste Eléctrico Acumulado</td>
+<td class="px-5 py-3 leading-relaxed">0 €</td>
+<td class="px-5 py-3 leading-relaxed">53,61 € (36 meses a 10,2W promedio)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Total Acumulado (3 Años)</strong></td>
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">1.305 €</strong></td>
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">353,61 €</strong></td>
+</tr>
+</tbody></table></div>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El retorno de la inversión (ROI) se alcanza antes del primer año de uso. A partir del mes 10, el sistema local genera un ahorro neto continuo, ofreciendo además una ventaja crítica: si tu proveedor de Internet sufre un corte, tu casa sigue funcionando, procesando comandos de voz y ejecutando automatizaciones complejas sin interrupción.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Recomendaciones Prácticas y Siguientes Pasos</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para garantizar la estabilidad y escalabilidad de tu infraestructura de IA local en los próximos años, aplica las siguientes pautas de mantenimiento técnico:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Aísla el consumo de memoria mediante cgroups:</strong> Limita el uso máximo de RAM del contenedor del motor de IA (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">npu-engine</code>) al 60% de tu memoria total. Esto evitará que un fallo de memoria (OOM Kicker) tumbe el contenedor crítico de Home Assistant.<br>2. <strong class="text-white font-semibold">Implementa almacenamiento secundario para vídeo:</strong> No escribas las grabaciones continuas de tus cámaras (Frigate / Scrypted) sobre el SSD NVMe principal. Utiliza un disco SSD SATA secundario o un almacenamiento NAS en red para evitar degradar las celdas de escritura (TBW) del disco donde reside la base de datos de Home Assistant.<br>3. <strong class="text-white font-semibold">Automatiza la rotación de modelos:</strong> Utiliza modelos pequeños (1B - 3B parámetros) para la interacción por voz en tiempo real donde la velocidad es prioritaria. Configura scripts en Home Assistant que deriven las tareas asíncronas complejas (resúmenes diarios de actividad, análisis de logs de seguridad) a modelos más grandes (8B - 14B) ejecutados durante la noche.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<div class="mt-12 pt-4 border-t border-neutral-900 text-[10.5px] text-neutral-600 font-mono italic tracking-tight">Disclosure:</div> This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*
+            </article>
+
+            <!-- Google AdSense Bottom Slot -->
+            <div class="my-12 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Editorial Ingestion Box for LLMs -->
+            <div class="mt-12 p-5 rounded-sm editorial-box border border-neutral-800 text-xs font-mono text-neutral-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-white font-bold">λ INTEROPERABILIDAD PARA MODELOS DE LENGUAJE</span>
+                        <p class="mt-1 text-neutral-400">Texto plano indexable sin marcado HTML para ChatGPT, Claude y Perplexity.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.md', 'URL copiada')" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-colors cursor-pointer">
+                            Copiar URL .md
+                        </button>
+                        <a href="https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.md" target="_blank" class="px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-sm transition-colors">
+                            Ver .md
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="border-t-2 border-neutral-800 bg-[#07080B]/90 backdrop-blur-md mt-20 py-12 text-neutral-500 text-xs font-mono relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <p class="text-white font-serif text-base font-bold tracking-wide uppercase">SYSARCH • HOMELAB JOURNAL</p>
+                <p class="text-neutral-500 text-xs mt-1">Investigación en Sistemas, Redes Privadas e IA • Dirigido por Jorge Baeza</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" class="hover:text-white transition-colors">/llms.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" class="hover:text-white transition-colors">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/sitemap.xml" class="hover:text-white transition-colors">Sitemap</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" class="hover:text-white transition-colors">Feed RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Script -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const m = document.getElementById('toastMsg');
+            m.innerText = msg;
+            t.classList.remove('hidden', 'toast-animate');
+            void t.offsetWidth;
+            t.classList.add('toast-animate');
+            setTimeout(() => { t.classList.add('hidden'); }, 2200);
+        }
+
+        function copyCode(btn) {
+            const card = btn.closest('.code-block');
+            const code = card.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const span = btn.querySelector('span');
+                const orig = span.innerText;
+                span.innerText = 'Copiado';
+                btn.classList.add('text-white', 'bg-neutral-700');
+                showToast('Bloque copiado');
+                setTimeout(() => {
+                    span.innerText = orig;
+                    btn.classList.remove('text-white', 'bg-neutral-700');
+                }, 2000);
+            });
+        }
+
+        function copyToClipboard(text, customMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(customMsg || 'Copiado al portapapeles');
+            });
+        }
+
+        // Shortcut: '/' or 'Cmd+K' to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.focus();
+                    search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

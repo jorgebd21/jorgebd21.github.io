@@ -7,6 +7,13 @@
     <language>es</language>
     <atom:link href="https://jorgebd21.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.html</link>
+      <description>Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada vez que pides encender la luz del despacho, tu arquitectura doméstica está desfasada. La actualización del núcleo de Home Assistant con soporte nativo para NPUs (Unidades de Procesamiento Neural) ha cambiado el equilibrio entre la nube y el procesamiento local.</description>
+      <category>Inteligencia Artificial</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.html</guid>
+    </item>
+    <item>
       <title>Segundos Cerebros Autónomos: De Archivos Muertos a Agentes Locales en Obsidian y Notion</title>
       <link>https://jorgebd21.github.io/post/draft_passed_20260901_092850_segundos_cerebros_autnomos_de_archivos_.html</link>
       <description>Llevas tres años creando carpetas, refinando metadatos en YAML y aplicando Zettelkasten o la metodología PARA en tu bóveda. El resultado real tras cientos de horas de mantenimiento suele ser el mismo: una morgue digital con miles de archivos Markdown que jamás vuelves a leer. En 2026, acumular información de forma pasiva ha dejado de ser una ventaja competitiva para convertirse en una deuda de mantenimiento infraestructural.</description>
