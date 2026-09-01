@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Homelab 2026: Tu Servidor de IA Local y Domótica sin Suscripciones — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026</title>
+    <meta name="description" content="La factura mensual de servicios de IA y domótica en la nube se ha vuelto insostenible para muchos, y la privacidad de nuestros datos, una preocupación creciente. Afortunadamente, la evolución del hardware en 2026 nos ofrece una salida robus...">
+    
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Guía Homelab 2026: Tu Servidor de IA Local y Domótica sin Suscripciones — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026">
+    <meta property="og:description" content="La factura mensual de servicios de IA y domótica en la nube se ha vuelto insostenible para muchos, y la privacidad de nuestros datos, una preocupación creciente. Afortunadamente, la evolución del hardware en 2026 nos ofrece una salida robus...">
+    <meta property="og:url" content="https://jorgebd21.github.io">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect Google Fonts for Editorial Press (Newsreader + Lora + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        body: ['"Lora"', 'Charter', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Editorial Typography & Universal Background Styles -->
+    <style>
+        body {
+            background-color: #0A0B0E;
+            color: #D4D4D8;
+            font-family: 'Lora', Charter, Georgia, serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .font-serif { font-family: 'Newsreader', Georgia, serif; }
+        .font-body { font-family: 'Lora', Charter, Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Universal Editorial Press Background Across ALL Pages */
+        .editorial-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../assets/editorial_bg.jpg'), url('/assets/editorial_bg.jpg'), url('https://jorgebd21.github.io/assets/editorial_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.16;
+            filter: contrast(135%) brightness(105%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .editorial-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(10, 11, 14, 0.35) 0%, rgba(10, 11, 14, 0.80) 65%, #0A0B0E 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Classic Editorial Drop Cap */
+        .editorial-lead::first-letter {
+            font-family: 'Newsreader', Georgia, serif;
+            float: left;
+            font-size: 3.85em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Subtle borders and paper feel */
+        .editorial-box {
+            background-color: rgba(15, 16, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .editorial-divider {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Clean Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0B0E; }
+        ::-webkit-scrollbar-thumb { background: #272A36; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4354; }
+
+        /* Toast animation */
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .toast-animate { animation: toastFade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+
+    <!-- Google AdSense Official Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9111135660504315" crossorigin="anonymous"></script>
+
+    <!-- LLM Autodiscovery & RSS -->
+    <link rel="alternate" type="text/plain" href="https://jorgebd21.github.io/llms.txt" title="LLM Context Index">
+    <link rel="alternate" type="application/rss+xml" href="https://jorgebd21.github.io/feed.xml" title="RSS Feed">
+    
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Guía Homelab 2026: Tu Servidor de IA Local y Domótica sin Suscripciones",
+            "description": "La factura mensual de servicios de IA y domótica en la nube se ha vuelto insostenible para muchos, y la privacidad de nuestros datos, una preocupación creciente. Afortunadamente, la evolución del hardware en 2026 nos ofrece una salida robus...",
+            "author": { "@type": "Person", "name": "Jorge Baeza" },
+            "publisher": { "@type": "Organization", "name": "SYSARCH • HOMELAB JOURNAL" },
+            "datePublished": "2026-09-01",
+            "dateModified": "2026-09-01",
+            "mainEntityOfPage": "https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.html",
+            "articleSection": "Fintech & Ahorro",
+            "proficiencyLevel": "Expert",
+            "dependencies": "Linux, Docker Compose, Shell, Python",
+            "wordCount": 2302,
+            "inLanguage": "es"
+        }
+        </script>
+        
+</head>
+<body class="bg-[#0A0B0E] text-zinc-300 min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+
+    <!-- Universal Editorial Background Layers -->
+    <div class="editorial-backdrop"></div>
+    <div class="editorial-vignette"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="px-4 py-2.5 rounded-sm editorial-box text-white font-mono text-xs shadow-2xl flex items-center gap-2 border-neutral-700">
+            <span class="text-neutral-400">✓</span>
+            <span id="toastMsg">Copiado al portapapeles</span>
+        </div>
+    </div>
+
+    <!-- Editorial Top Utility Bar -->
+    <div class="border-b border-neutral-800/80 bg-[#08080B]/90 backdrop-blur-md text-neutral-400 font-mono text-[11px] py-1.5 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-neutral-400 font-semibold">SYSARCH LABS</span>
+                <span>•</span>
+                <span class="text-neutral-400">EDICIÓN 2026 // VOL. IV</span>
+                <span>•</span>
+                <span class="text-neutral-500 hidden md:inline">HOMELAB & SISTEMAS AUTÓNOMOS</span>
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1" title="Índice para Modelos de Lenguaje">
+                    <span>λ</span> <span>/llms.txt</span>
+                </a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" target="_blank" class="hover:text-white transition-colors" title="Corpus RAG Completo">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" target="_blank" class="hover:text-white transition-colors">RSS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publication Masthead / Header -->
+    <header class="border-b border-neutral-800 bg-[#0A0B0E]/80 backdrop-blur-md pt-8 pb-6 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <a href="https://jorgebd21.github.io/" class="group">
+                        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.06em] text-white group-hover:text-neutral-300 transition-colors uppercase">
+                            SYSARCH • HOMELAB JOURNAL
+                        </h1>
+                    </a>
+                    <p class="font-mono text-xs uppercase tracking-widest text-neutral-400 mt-1">
+                        Publicación Técnica de Arquitectura de Sistemas, Redes Zero-Trust e IA Local
+                    </p>
+                </div>
+
+                <div class="text-right hidden sm:block font-mono text-xs text-neutral-400 border-l border-neutral-800 pl-6">
+                    <p class="text-white font-semibold">COSTE CERO & ZERO-EXPOSURE</p>
+                    <p class="text-neutral-500 text-[11px] mt-0.5">Airgapped GitOps Publishing</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editorial Layout -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+        
+        <div class="max-w-[68ch] mx-auto">
+            <!-- Journal Navigation -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 pb-3 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+                <a href="https://jorgebd21.github.io/" class="hover:text-white flex items-center gap-1.5 transition-colors group">
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>Todas las publicaciones</span>
+                </a>
+                
+                <div class="flex items-center gap-3 self-end sm:self-auto">
+                    <a href="https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.md" target="_blank" class="hover:text-white transition-colors" title="Ver formato Markdown puro">
+                        λ .md raw
+                    </a>
+                    <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.md', 'URL Markdown copiada para IA')" class="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-all cursor-pointer active:scale-95" title="Copiar URL para ChatGPT / Claude">
+                        Copiar para IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Header -->
+            <header class="mb-10 pb-6 border-b-2 border-neutral-800">
+                <div class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                    Fintech & Ahorro // ANÁLISIS TÉCNICO
+                </div>
+
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+                    Guía Homelab 2026: Tu Servidor de IA Local y Domótica sin Suscripciones
+                </h1>
+
+                
+
+                <div class="mt-6 pt-4 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-neutral-400">
+                    <div>Por <span class="text-white font-semibold">Jorge Baeza</span></div>
+                    <div>01.09.2026 • 12 min de lectura (2,302 palabras)</div>
+                </div>
+            </header>
+
+            <!-- Google AdSense In-Article Slot -->
+            <div class="my-8 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Article Body (with Drop Cap on lead paragraph) -->
+            <article class="prose prose-invert max-w-none text-neutral-200">
+                <p class="editorial-lead text-neutral-200 font-body text-[17.5px] sm:text-[18.5px] leading-[1.85] mb-6">La factura mensual de servicios de IA y domótica en la nube se ha vuelto insostenible para muchos, y la privacidad de nuestros datos, una preocupación creciente. Afortunadamente, la evolución del hardware en 2026 nos ofrece una salida robusta y eficiente. Con un Mini PC moderno y un <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker compose up -d</code>, podemos desplegar un servidor local capaz de gestionar nuestro hogar y ejecutar modelos de lenguaje (LLMs) sin depender de terceros ni pagar suscripciones.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">La Los procesadores lanzados en 2026 y 2025, y ahora estandarizados en 2026, han democratizado la inteligencia artificial local. La clave está en la Unidad de Procesamiento Neuronal (NPU) integrada directamente en la CPU. Chips como los Intel Core Ultra (ej. 125H, 155H, 185H de “Meteor Lake” y “Lunar Lake”) o los AMD Ryzen serie 8000 y 9000 (con arquitecturas XDNA y XDNA 2) no son solo más potentes, sino que están diseñados específicamente para acelerar cargas de trabajo de IA con una eficiencia energética asombrosa.</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Mientras que una GPU dedicada sigue siendo el rey para el entrenamiento de modelos masivos, para la <em>inferencia</em> de LLMs de tamaño medio (7B, 13B, incluso 30B parámetros) y la ejecución de tareas de visión por computador, la NPU es un cambio de juego. Permite ejecutar modelos cuantizados (ej. GGUF) a velocidades utilizables con un consumo de energía que antes era impensable. Un Mini PC con un Core Ultra 5 o Ryzen 7 puede ejecutar un modelo Llama 3 8B en local a varias decenas de tokens por segundo, consumiendo apenas 15-25W en carga máxima. Esto abre la puerta a asistentes de voz locales, resúmenes de texto, y automatizaciones inteligentes sin enviar un solo byte a la nube.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para presupuestos más ajustados, incluso los procesadores Intel N100 o N305, aunque carecen de una NPU dedicada de alto rendimiento, ofrecen una mejora significativa en la eficiencia y capacidad de cómputo respecto a generaciones anteriores, siendo perfectamente válidos para Home Assistant y modelos LLM muy pequeños o para tareas de inferencia menos exigentes.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Comparativa de Eficiencia: Mini PC Moderno vs. Torre Vieja</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Reutilizar un viejo PC de sobremesa como servidor 24/7 es una tentación común, pero es un error costoso a largo plazo. La eficiencia energética de los Mini PCs modernos es incomparable.</p>
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm"><table class="w-full text-left border-collapse text-[13.5px]">
+<thead class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<tr>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">Característica</th>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">Mini PC Moderno (2026)</th>
+<th class="px-5 py-3 font-semibold" style="text-align: left;">Torre PC Antigua (2018)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>CPU/NPU</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Intel Core Ultra 5/7, AMD Ryzen 8000/9000 (15-25W)</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Intel Core i5/i7 (80-120W), AMD Ryzen 2000/3000 (65-105W)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Consumo Típico</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">10-25W (ralentí a carga LLM)</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">60-150W (ralentí a carga ligera)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Ruido</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Prácticamente inaudible (ventiladores pequeños/pasivo)</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Ventiladores de CPU/GPU/PSU ruidosos</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Tamaño/Formato</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Compacto (0.5-2 litros), fácil de ocultar</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Voluminoso (15-30 litros), ocupa espacio</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Coste Eléctrico</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">~20-50€/año (24/7)</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">~120-300€/año (24/7)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;"><strong>Capacidad IA</strong></td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">NPU dedicada, inferencia LLM eficiente</td>
+<td class="px-5 py-3 leading-relaxed" style="text-align: left;">Depende de GPU dedicada, menos eficiente para LLMs locales</td>
+</tr>
+</tbody>
+</table></div>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La diferencia en el consumo eléctrico es el factor más crítico. Un Mini PC que consume 20W de media durante todo el año te costará unos 40€ anuales en electricidad (calculando 0.25€/kWh). Una torre antigua que consume 100W de media te costará 200€ anuales. La inversión inicial en un Mini PC de 250-400€ se amortiza rápidamente solo con el ahorro energético, sin contar el menor ruido, el tamaño reducido y la capacidad de IA integrada.</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Errores Fatales al Comprar Hardware para Homelab</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La elección del hardware es crucial y un par de decisiones equivocadas pueden arruinar la experiencia o la longevidad de tu servidor.</p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Cuellos de Botella en la RAM No Ampliable</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Muchos Mini PCs ultracompactos, especialmente los de gama baja, vienen con la RAM soldada a la placa base. Esto es un <em>error fatal</em> para un servidor de Homelab.</p>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Necesidad de RAM:</strong> Home Assistant, Docker, y especialmente los LLMs, son voraces en cuanto a memoria. 16GB de RAM es un mínimo absoluto para un servidor con Home Assistant y un LLM pequeño. Para modelos de 13B o 30B, 32GB o incluso 64GB son recomendables.</li>
+<li><strong>Ampliabilidad:</strong> Si compras un Mini PC con 8GB o 16GB soldados, te quedarás sin margen de mejora. En cuanto intentes cargar un LLM más grande o añadir más servicios Docker, el rendimiento se desplomará debido al <em>swapping</em> constante al disco.</li>
+<li><strong>Recomendación:</strong> Busca Mini PCs con ranuras SO-DIMM (DDR5 es el estándar actual) que permitan la ampliación. Idealmente, compra uno con 16GB y la opción de añadir otro módulo para llegar a 32GB si es necesario.</li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Almacenamiento NVMe de Bajo Coste en Servidores de Escritura Continua</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Los SSD NVMe son rápidos y asequibles, pero no todos son iguales, especialmente para un servidor 24/7 con bases de datos (como la de Home Assistant) y logs que generan escrituras constantes.</p>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Tipos de NAND:</strong><ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>QLC (Quad-Level Cell):</strong> La más barata, pero la menos duradera y con peor rendimiento sostenido. Cada celda almacena 4 bits, lo que reduce su vida útil (TBW - Terabytes Written).</li>
+<li><strong>TLC (Triple-Level Cell):</strong> Un buen equilibrio entre coste y durabilidad. Cada celda almacena 3 bits.</li>
+<li><strong>MLC (Multi-Level Cell):</strong> Más cara, pero más duradera y rápida. Cada celda almacena 2 bits.</li>
+</ul>
+</li>
+<li><strong>Caché DRAM:</strong> Los SSD de calidad incluyen una caché DRAM dedicada que mejora drásticamente el rendimiento en escrituras aleatorias y la durabilidad. Los NVMe “DRAM-less” son más baratos pero sufren de rendimiento inconsistente y mayor desgaste en cargas de trabajo intensivas.</li>
+<li><strong>TBW (Terabytes Written):</strong> Es la métrica clave de durabilidad. Un SSD de 1TB QLC de bajo coste puede tener un TBW de 200-400TB. Un TLC de calidad puede superar los 600-800TB. Para un servidor, busca un NVMe TLC con caché DRAM y un TBW decente.</li>
+<li><strong>Recomendación:</strong> Invierte en un NVMe de marca reconocida (Samsung 970 EVO Plus/980 Pro, Crucial P5 Plus, Western Digital Black SN770/SN850X) con caché DRAM. Si el presupuesto es muy ajustado, al menos asegúrate de que sea TLC y no QLC. Considera un NVMe más pequeño (250-500GB) para el sistema operativo y las bases de datos críticas, y si necesitas mucho almacenamiento, un HDD externo USB 3.2 o un NAS aparte para datos menos sensibles.</li>
+</ul>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Guía de Despliegue Paso a Paso: Home Assistant y Ollama en tu Mini PC</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Vamos a montar un sistema robusto y modular usando Docker Compose.</p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Preparación del Hardware y Sistema Operativo</h3>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Mini PC:</strong> Adquiere un Mini PC con al menos 16GB de RAM (ampliable a 32GB), un NVMe TLC con DRAM cache, y un procesador con NPU (Intel Core Ultra o AMD Ryzen 8000/9000) si tu presupuesto lo permite, o un N100/N305 para empezar.</li>
+<li><strong>Instalación del SO:</strong> Instala una distribución Linux ligera y estable. Debian 12 “Bookworm” (versión Server, sin entorno gráfico) es una excelente opción.</li>
+</ol>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li>Descarga la ISO, crea un USB booteable.</li>
+<li>Instala Debian, configurando una IP estática para tu servidor.</li>
+<li>Actualiza el sistema:
+        <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">sudo apt update &amp;&amp; sudo apt upgrade -y</code></pre></div></li>
+<li>Instala herramientas básicas:
+        <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">sudo apt install -y curl wget git htop neofetch</code></pre></div></li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Instalación de Docker y Docker Compose</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Docker es la base de nuestro despliegue, permitiéndonos ejecutar Home Assistant y Ollama en contenedores aislados.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>Instalar Docker Engine:</strong>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">sudo apt update
+sudo apt install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+  "$(. /etc/os-release &amp;&amp; echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y</code></pre></div>
+2.  <strong>Añadir tu usuario al grupo docker:</strong> Esto te permite ejecutar comandos docker sin <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">sudo</code>.
+    <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">sudo usermod -aG docker $USER
+newgrp docker # O cierra y vuelve a abrir la sesión SSH</code></pre></div>
+3.  <strong>Verificar instalación:</strong>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">docker run hello-world</code></pre></div></p>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">3. Configuración de Home Assistant y Ollama con Docker Compose</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Crearemos un archivo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code> para gestionar ambos servicios.</p>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Crear directorios:</strong>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">mkdir -p ~/homelab/homeassistant/config
+mkdir -p ~/homelab/ollama/models</code></pre></div></li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>Crear <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code>:</strong>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">nano ~/homelab/docker-compose.yml</code></pre></div>
+    Pega el siguiente contenido (asegúrate de ajustar la zona horaria y el dispositivo NPU si es necesario):</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">version: '3.8'
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    volumes:
+      - ./homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true # Necesario para algunas integraciones de hardware USB
+    network_mode: host # Permite a HA descubrir dispositivos en la red local
+    environment:
+      - TZ=Europe/Madrid # Ajusta tu zona horaria
+
+  ollama:
+    container_name: ollama
+    image: ollama/ollama:latest
+    volumes:
+      - ./ollama/models:/root/.ollama # Almacena los modelos aquí
+    restart: unless-stopped
+    ports:
+      - "11434:11434" # Puerto por defecto de Ollama
+    # Si tu Mini PC tiene NPU, puedes intentar mapear el dispositivo:
+    # devices:
+    #   - /dev/dri:/dev/dri # Para Intel iGPU/NPU
+    #   - /dev/kfd:/dev/kfd # Para AMD iGPU/NPU
+    #   - /dev/accel/accel0:/dev/accel/accel0 # Ejemplo para NPU específica
+    # environment:
+    #   - OLLAMA_HOST=0.0.0.0:11434 # Opcional, por defecto ya escucha en 0.0.0.0
+    #   - OLLAMA_NUM_GPU=1 # Opcional, para especificar el número de GPUs/NPUs</code></pre></div>
+*   <strong>Nota sobre <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">devices</code> para Ollama:</strong> La forma de exponer la NPU al contenedor Docker puede variar. Para Intel Core Ultra, a menudo es suficiente con <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/dri</code> (para la iGPU que la NPU utiliza). Para AMD Ryzen con XDNA, puede ser <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/kfd</code> o dispositivos específicos bajo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/accel</code>. Consulta la documentación de Ollama y de tu distribución Linux para la configuración exacta de tu NPU. Si no estás seguro, omite la sección <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">devices</code> inicialmente; Ollama funcionará en CPU, aunque más lento.</p>
+</li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>Iniciar los servicios:</strong>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">cd ~/homelab
+docker compose up -d</code></pre></div>
+    Esto descargará las imágenes y arrancará los contenedores.</p>
+</li>
+</ol>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">4. Configuración Inicial de Home Assistant</h3>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Accede a Home Assistant desde tu navegador: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://&lt;IP_DE_TU_MINIPC&gt;:8123</code></p>
+</li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Sigue el asistente de configuración para crear tu usuario y contraseña.</p>
+</li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Home Assistant debería detectar automáticamente algunos dispositivos en tu red.</p>
+</li>
+</ol>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">5. Descarga y Uso de Modelos LLM con Ollama</h3>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Descargar un modelo:</strong> Desde tu Mini PC (o vía SSH), usa el cliente de Ollama para descargar un modelo. Llama 3 8B es un buen punto de partida.
+    <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">docker exec -it ollama ollama run llama3</code></pre></div>
+    Esto descargará el modelo y te permitirá interactuar con él directamente en la terminal. Escribe <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">bye</code> para salir.</li>
+<li><strong>Probar la API de Ollama:</strong> Puedes probar que Ollama está sirviendo el modelo con <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">curl</code> desde tu Mini PC o cualquier máquina en la misma red:
+    <div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">curl http://localhost:11434/api/generate -d '{
+  "model": "llama3",
+  "prompt": "¿Cuál es la capital de Francia?"
+}'</code></pre></div></li>
+</ol>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">6. Integración de Ollama con Home Assistant para IA Local</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Home Assistant tiene una integración nativa para Ollama, lo que te permite usar tu LLM local para automatizaciones, respuestas de voz, etc.</p>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><strong>En Home Assistant:</strong> Ve a <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Ajustes</code> -&gt; <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Dispositivos y Servicios</code> -&gt; <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Añadir Integración</code>.</p>
+</li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Busca “Ollama”.</p>
+</li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Introduce la URL de tu servidor Ollama: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">http://&lt;IP_DE_TU_MINIPC&gt;:11434</code>.</p>
+</li>
+<li>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Una vez configurado, puedes usar el servicio <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">llm.generate</code> en tus automatizaciones o scripts. Por ejemplo, para un asistente de voz local, puedes configurar un micrófono USB en tu Mini PC y usar la integración “Assist” de Home Assistant, dirigiéndola a tu modelo Ollama.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6"><div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class=""># Ejemplo de automatización en Home Assistant (automations.yaml)
+- alias: 'Respuesta de IA a comando de voz'
+  trigger:
+    platform: event
+    event_type: assist_pipeline_result
+    event_data:
+      pipeline_id: your_local_voice_pipeline # Asegúrate de tener una pipeline local configurada
+      intent_type: conversation
+  condition:
+    - condition: template
+      value_template: "{{ trigger.event.data.intent_output.response.response_type == 'query' }}"
+  action:
+    - service: llm.generate
+      data:
+        model: ollama_llama3 # Nombre de tu modelo Ollama configurado en HA
+        prompt: "{{ trigger.event.data.intent_output.response.speech.plain.speech }}"
+      response_variable: llm_response
+    - service: tts.speak
+      data:
+        media_player_entity_id: media_player.your_speaker # Tu altavoz local
+        message: "{{ llm_response.text }}"</code></pre></div>
+<em>Este es un ejemplo simplificado. La configuración de un asistente de voz local completo en Home Assistant implica configurar una “Assist Pipeline” con un motor de reconocimiento de voz (ej. Whisper local) y un motor de texto a voz (ej. Piper local), todo ello ejecutándose en tu Mini PC.</em></p>
+</li>
+</ol>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para tu Despliegue</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Has sentado las bases de un Homelab potente y privado. Aquí tienes algunos pasos siguientes y consideraciones:</p>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Seguridad:</strong><ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li>Cambia las contraseñas por defecto.</li>
+<li>Configura un firewall (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">ufw</code>) en tu Mini PC para permitir solo los puertos necesarios (SSH, 8123 para HA, 11434 para Ollama).</li>
+<li>Considera una VPN (ej. WireGuard) para acceder a tu Homelab de forma segura desde fuera de casa, en lugar de abrir puertos directamente al router.</li>
+</ul>
+</li>
+<li><strong>Copias de Seguridad:</strong> Configura copias de seguridad automáticas del directorio <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">~/homelab/homeassistant/config</code> y <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">~/homelab/ollama/models</code> a un almacenamiento externo o a la nube (cifrado).</li>
+<li><strong>Más Servicios:</strong> Una vez que te sientas cómodo, puedes añadir más servicios Docker:<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>AdGuard Home:</strong> Bloqueador de anuncios y rastreadores a nivel de red.</li>
+<li><strong>Vaultwarden:</strong> Gestor de contraseñas autoalojado.</li>
+<li><strong>Nextcloud:</strong> Nube personal para archivos y colaboración.</li>
+<li><strong>n8n o Node-RED:</strong> Herramientas de automatización visual para flujos de trabajo complejos.</li>
+<li><strong>Plex/Jellyfin:</strong> Servidor multimedia.</li>
+</ul>
+</li>
+<li><strong>Monitorización:</strong> Instala herramientas como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Portainer</code> (interfaz gráfica para Docker) o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Grafana</code> con <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Prometheus</code> para monitorizar el rendimiento y el estado de tus servicios.</li>
+<li><strong>Optimización de NPU:</strong> Experimenta con las configuraciones de <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">devices</code> en Ollama y busca versiones de modelos LLM optimizadas para NPUs (a menudo etiquetadas como “quantized” o “GGUF” con capas específicas para aceleración de hardware).</li>
+</ol>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Este enfoque te proporciona un control total sobre tu infraestructura digital, eliminando dependencias de terceros y protegiendo tu privacidad, todo ello con una eficiencia energética que hace que la inversión inicial sea rápidamente rentable.</p>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<div class="mt-12 pt-4 border-t border-neutral-900 text-[10.5px] text-neutral-600 font-mono italic tracking-tight">Disclosure:</div>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*</p>
+            </article>
+
+            <!-- Google AdSense Bottom Slot -->
+            <div class="my-12 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Editorial Ingestion Box for LLMs -->
+            <div class="mt-12 p-5 rounded-sm editorial-box border border-neutral-800 text-xs font-mono text-neutral-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-white font-bold">λ INTEROPERABILIDAD PARA MODELOS DE LENGUAJE</span>
+                        <p class="mt-1 text-neutral-400">Texto plano indexable sin marcado HTML para ChatGPT, Claude y Perplexity.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.md', 'URL copiada')" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-colors cursor-pointer">
+                            Copiar URL .md
+                        </button>
+                        <a href="https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.md" target="_blank" class="px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-sm transition-colors">
+                            Ver .md
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="border-t-2 border-neutral-800 bg-[#07080B]/90 backdrop-blur-md mt-20 py-12 text-neutral-500 text-xs font-mono relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <p class="text-white font-serif text-base font-bold tracking-wide uppercase">SYSARCH • HOMELAB JOURNAL</p>
+                <p class="text-neutral-500 text-xs mt-1">Investigación en Sistemas, Redes Privadas e IA • Dirigido por Jorge Baeza</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" class="hover:text-white transition-colors">/llms.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" class="hover:text-white transition-colors">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/sitemap.xml" class="hover:text-white transition-colors">Sitemap</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" class="hover:text-white transition-colors">Feed RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Script -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const m = document.getElementById('toastMsg');
+            m.innerText = msg;
+            t.classList.remove('hidden', 'toast-animate');
+            void t.offsetWidth;
+            t.classList.add('toast-animate');
+            setTimeout(() => { t.classList.add('hidden'); }, 2200);
+        }
+
+        function copyCode(btn) {
+            const card = btn.closest('.code-block');
+            const code = card.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const span = btn.querySelector('span');
+                const orig = span.innerText;
+                span.innerText = 'Copiado';
+                btn.classList.add('text-white', 'bg-neutral-700');
+                showToast('Bloque copiado');
+                setTimeout(() => {
+                    span.innerText = orig;
+                    btn.classList.remove('text-white', 'bg-neutral-700');
+                }, 2000);
+            });
+        }
+
+        function copyToClipboard(text, customMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(customMsg || 'Copiado al portapapeles');
+            });
+        }
+
+        // Shortcut: '/' or 'Cmd+K' to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.focus();
+                    search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

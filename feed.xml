@@ -7,6 +7,34 @@
     <language>es</language>
     <atom:link href="https://jorgebd21.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Guía Homelab 2026: Tu Servidor de IA Local y Domótica sin Suscripciones</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.html</link>
+      <description>La factura mensual de servicios de IA y domótica en la nube se ha vuelto insostenible para muchos, y la privacidad de nuestros datos, una preocupación creciente. Afortunadamente, la evolución del hardware en 2026 nos ofrece una salida robus...</description>
+      <category>Fintech &amp; Ahorro</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_122332_gua_homelab_2026_tu_servidor_de_ia_loca.html</guid>
+    </item>
+    <item>
+      <title>De Segundo Cerebro a Cerebro Activo: Cómo configurar tu IA Local en Obsidian y Notion en 2026</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_122014_de_segundo_cerebro_a_cerebro_activo_cmo.html</link>
+      <description>El síndrome del acumulador digital ha muerto por saturación. Guardar 4.500 recortes de páginas web, PDFs de investigaciones y notas de reuniones en una carpeta de Obsidian que nunca volverás a abrir no es un &quot;Segundo Cerebro&quot;; es un vertede...</description>
+      <category>Productividad &amp; Notas</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_122014_de_segundo_cerebro_a_cerebro_activo_cmo.html</guid>
+    </item>
+    <item>
+      <title>Guía 2026: Cómo crear tu propia red de Agentes de IA autónomos (y gratis) para automatizar tu trabajo diario</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_121841_gua_2026_cmo_crear_tu_propia_red_de_ag.html</link>
+      <description>En enero de 2026, el coste de procesar un millón de tokens de entrada en modelos de razonamiento avanzados como DeepSeek-R1 ha caído por debajo de los 0,55 $. Esta deflación agresiva en el coste de las APIs de Inteligencia Artificial cambia...</description>
+      <category>Inteligencia Artificial</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_121841_gua_2026_cmo_crear_tu_propia_red_de_ag.html</guid>
+    </item>
+    <item>
+      <title>AUDITORÍA PRE-FLIGHT RECHAZADA</title>
+      <link>https://jorgebd21.github.io/post/draft_failed_20260901_121542_automatizacin_agntica_en_2026_orquesta.html</link>
+      <description>Ejecutar un bucle de razonamiento autónomo de 50 pasos hoy, en 2026, cuesta menos de 0.05 USD. La drástica caída de los costes de inferencia, liderada por la eficiencia de los modelos de razonamiento de DeepSeek y la precisión de la suite d...</description>
+      <category>Infraestructura &amp; DevOps</category>
+      <guid>https://jorgebd21.github.io/post/draft_failed_20260901_121542_automatizacin_agntica_en_2026_orquesta.html</guid>
+    </item>
+    <item>
       <title>El coste del &quot;SaaS Drift&quot; en 2026: Cómo los agentes de IA autónomos detienen la sangría financiera en tu pila tecnológica</title>
       <link>https://jorgebd21.github.io/post/draft_passed_20260901_113103_el_coste_del_saas_drift_en_2026_cmo_los.html</link>
       <description>Cómo los agentes de IA autónomos analizan webhooks bancarios, cancelan suscripciones inactivas y detienen la fuga silenciosa de capital en infraestructura de software.</description>
