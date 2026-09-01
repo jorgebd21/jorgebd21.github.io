@@ -7,6 +7,13 @@
     <language>es</language>
     <atom:link href="https://jorgebd21.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma</title>
+      <link>https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.html</link>
+      <description>El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activas de herramientas de diseño para colaboradores externos que terminaron su contrato, una suscripción redundante a un LLM comercial y dos dominios en renovación automática que no resolvían ningún registro DNS. En total: 412 euros al mes desperdiciados en micro-pagos invisibles.</description>
+      <category>Inteligencia Artificial</category>
+      <guid>https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.html</guid>
+    </item>
+    <item>
       <title>Servidor de IA Local y Domótica Privada en 2026: Tu Mini PC con NPU a Examen</title>
       <link>https://jorgebd21.github.io/post/draft_passed_20260901_092951_servidor_de_ia_local_y_domtica_privada_.html</link>
       <description>Si pagas 20 euros al mes por una suscripción a modelos de lenguaje en la nube, otros 7 euros mensuales por integrar la voz en tu domótica y experimentas una latencia de cuatro segundos cada vez que pides encender la luz del despacho, tu arquitectura doméstica está desfasada. La actualización del núcleo de Home Assistant con soporte nativo para NPUs (Unidades de Procesamiento Neural) ha cambiado el equilibrio entre la nube y el procesamiento local.</description>

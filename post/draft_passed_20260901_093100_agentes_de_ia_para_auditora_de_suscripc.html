@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026</title>
+    <meta name="description" content="El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activas de herramientas de diseño para colaboradores externos que terminaron su contrato, una suscripción redundante a un LLM comercial y dos dominios en renovación automática que no resolvían ningún registro DNS. En total: 412 euros al mes desperdiciados en micro-pagos invisibles.">
+    
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026">
+    <meta property="og:description" content="El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activas de herramientas de diseño para colaboradores externos que terminaron su contrato, una suscripción redundante a un LLM comercial y dos dominios en renovación automática que no resolvían ningún registro DNS. En total: 412 euros al mes desperdiciados en micro-pagos invisibles.">
+    <meta property="og:url" content="https://jorgebd21.github.io">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect Google Fonts for Editorial Press (Newsreader + Lora + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        body: ['"Lora"', 'Charter', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Editorial Typography & Universal Background Styles -->
+    <style>
+        body {
+            background-color: #0A0B0E;
+            color: #D4D4D8;
+            font-family: 'Lora', Charter, Georgia, serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .font-serif { font-family: 'Newsreader', Georgia, serif; }
+        .font-body { font-family: 'Lora', Charter, Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Universal Editorial Press Background Across ALL Pages */
+        .editorial-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../assets/editorial_bg.jpg'), url('/assets/editorial_bg.jpg'), url('https://jorgebd21.github.io/assets/editorial_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.16;
+            filter: contrast(135%) brightness(105%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .editorial-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(10, 11, 14, 0.35) 0%, rgba(10, 11, 14, 0.80) 65%, #0A0B0E 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Classic Editorial Drop Cap */
+        .editorial-lead::first-letter {
+            font-family: 'Newsreader', Georgia, serif;
+            float: left;
+            font-size: 3.85em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Subtle borders and paper feel */
+        .editorial-box {
+            background-color: rgba(15, 16, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .editorial-divider {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Clean Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0B0E; }
+        ::-webkit-scrollbar-thumb { background: #272A36; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4354; }
+
+        /* Toast animation */
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .toast-animate { animation: toastFade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+
+    <!-- Google AdSense Official Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9111135660504315" crossorigin="anonymous"></script>
+
+    <!-- LLM Autodiscovery & RSS -->
+    <link rel="alternate" type="text/plain" href="https://jorgebd21.github.io/llms.txt" title="LLM Context Index">
+    <link rel="alternate" type="application/rss+xml" href="https://jorgebd21.github.io/feed.xml" title="RSS Feed">
+    
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma",
+            "description": "El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activas de herramientas de diseño para colaboradores externos que terminaron su contrato, una suscripción redundante a un LLM comercial y dos dominios en renovación automática que no resolvían ningún registro DNS. En total: 412 euros al mes desperdiciados en micro-pagos invisibles.",
+            "author": { "@type": "Person", "name": "Jorge Baeza" },
+            "publisher": { "@type": "Organization", "name": "SYSARCH • HOMELAB JOURNAL" },
+            "datePublished": "2026-09-01",
+            "mainEntityOfPage": "https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.html",
+            "articleSection": "Inteligencia Artificial",
+            "wordCount": 1483,
+            "inLanguage": "es"
+        }
+        </script>
+        
+</head>
+<body class="bg-[#0A0B0E] text-zinc-300 min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+
+    <!-- Universal Editorial Background Layers -->
+    <div class="editorial-backdrop"></div>
+    <div class="editorial-vignette"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="px-4 py-2.5 rounded-sm editorial-box text-white font-mono text-xs shadow-2xl flex items-center gap-2 border-neutral-700">
+            <span class="text-neutral-400">✓</span>
+            <span id="toastMsg">Copiado al portapapeles</span>
+        </div>
+    </div>
+
+    <!-- Editorial Top Utility Bar -->
+    <div class="border-b border-neutral-800/80 bg-[#08080B]/90 backdrop-blur-md text-neutral-400 font-mono text-[11px] py-1.5 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-neutral-400 font-semibold">SYSARCH LABS</span>
+                <span>•</span>
+                <span class="text-neutral-400">EDICIÓN 2026 // VOL. IV</span>
+                <span>•</span>
+                <span class="text-neutral-500 hidden md:inline">HOMELAB & SISTEMAS AUTÓNOMOS</span>
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1" title="Índice para Modelos de Lenguaje">
+                    <span>λ</span> <span>/llms.txt</span>
+                </a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" target="_blank" class="hover:text-white transition-colors" title="Corpus RAG Completo">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" target="_blank" class="hover:text-white transition-colors">RSS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publication Masthead / Header -->
+    <header class="border-b border-neutral-800 bg-[#0A0B0E]/80 backdrop-blur-md pt-8 pb-6 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <a href="https://jorgebd21.github.io/" class="group">
+                        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.06em] text-white group-hover:text-neutral-300 transition-colors uppercase">
+                            SYSARCH • HOMELAB JOURNAL
+                        </h1>
+                    </a>
+                    <p class="font-mono text-xs uppercase tracking-widest text-neutral-400 mt-1">
+                        Publicación Técnica de Arquitectura de Sistemas, Redes Zero-Trust e IA Local
+                    </p>
+                </div>
+
+                <div class="text-right hidden sm:block font-mono text-xs text-neutral-400 border-l border-neutral-800 pl-6">
+                    <p class="text-white font-semibold">COSTE CERO & ZERO-EXPOSURE</p>
+                    <p class="text-neutral-500 text-[11px] mt-0.5">Airgapped GitOps Publishing</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editorial Layout -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+        
+        <div class="max-w-[68ch] mx-auto">
+            <!-- Journal Navigation -->
+            <div class="flex items-center justify-between gap-4 mb-8 pb-3 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+                <a href="https://jorgebd21.github.io/" class="hover:text-white flex items-center gap-1.5 transition-colors group">
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>Todas las publicaciones</span>
+                </a>
+                
+                <div class="flex items-center gap-3">
+                    <a href="https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.md" target="_blank" class="hover:text-white transition-colors" title="Ver formato Markdown puro">
+                        λ .md raw
+                    </a>
+                    <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.md', 'URL Markdown copiada para IA')" class="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-all cursor-pointer active:scale-95" title="Copiar URL para ChatGPT / Claude">
+                        Copiar para IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Header -->
+            <header class="mb-10 pb-6 border-b-2 border-neutral-800">
+                <div class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                    Inteligencia Artificial // ANÁLISIS TÉCNICO
+                </div>
+
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+                    Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma
+                </h1>
+
+                <p class="font-serif italic text-lg sm:text-xl text-neutral-300 mt-4 leading-relaxed border-l-2 border-neutral-500 pl-4 py-1">El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activ...</p>
+
+                <div class="mt-6 pt-4 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-neutral-400">
+                    <div>Por <span class="text-white font-semibold">Jorge Baeza</span></div>
+                    <div>01.09.2026 • 7 min de lectura (1,483 palabras)</div>
+                </div>
+            </header>
+
+            <!-- Google AdSense In-Article Slot -->
+            <div class="my-8 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Article Body (with Drop Cap on lead paragraph) -->
+            <article class="prose prose-invert max-w-none text-neutral-200">
+                <h1 class="font-serif text-3xl sm:text-4xl font-bold text-white mt-12 mb-6 tracking-normal">Agentes de IA para Auditoría de Suscripciones en 2026: Del Análisis de Extractos a la Cancelación Autónoma</h1>
+
+<p class="editorial-lead text-neutral-200 font-body text-[17.5px] sm:text-[18.5px] leading-[1.85] mb-6">El mes pasado revisé los extractos consolidados de mi infraestructura personal y de equipo. Encontré tres bases de datos en la nube sin tráfico activo desde noviembre, cuatro licencias activas de herramientas de diseño para colaboradores externos que terminaron su contrato, una suscripción redundante a un LLM comercial y dos dominios en renovación automática que no resolvían ningún registro DNS. En total: 412 euros al mes desperdiciados en micro-pagos invisibles.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Un reciente informe del sector fintech confirma que el usuario técnico o PYME promedio pierde entre un 18% y un 25% de su presupuesto mensual en "software fantasma": servicios activados para pruebas puntuales, renovaciones automáticas no notificadas o escalados innecesarios de nivel de suscripción.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En 2026, la respuesta a este problema ha dejado de ser la hoja de cálculo manual. La maduración de <strong class="text-white font-semibold">Open Banking 3.0</strong> (bajo el marco ampliado PSD3 en Europa y las API bancarias abiertas en América) junto con los <strong class="text-white font-semibold">agentes de IA autónomos con capacidad de ejecución (<em class="text-neutral-300 italic font-serif">function calling</em>)</strong>, permite auditar, renegociar y cancelar estos cobros sin intervención humana directa.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">1. Arquitectura de un Agente Financiero Autónomo en 2026</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Un agente de ahorro no es un simple script de clasificación por palabras clave. En el estándar técnico actual, se trata de una arquitectura distribuida basada en tres pilares:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Ingestión mediante Open Banking 3.0 (API First):</strong> A través de agregadores como GoCardless, Plaid o Nordigen, el agente no recibe extractos en PDF ni realiza <em class="text-neutral-300 italic font-serif">web scraping</em> frágil. Consume Webhooks en tiempo real emitidos por las entidades bancarias bajo esquemas de autenticación OAuth2 estructurados con tokens de acceso restringidos.<br>2. <strong class="text-white font-semibold">Motor de Inferencia y Normalización de Datos:</strong> Un modelo de lenguaje (como Claude 3.5 Sonnet o un modelo local mediante Ollama en servidor propio) recibe la carga útil (<em class="text-neutral-300 italic font-serif">payload</em>) JSON de las transacciones. Normaliza descriptores ambiguos (por ejemplo, <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">AMZN<em class="text-neutral-300 italic font-serif">MKTP US</code> o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">STRIPE</em>VERCEL</code>) identificando al proveedor real, la frecuencia de facturación y el histórico de variación de precios.<br>3. <strong class="text-white font-semibold">Capa de Ejecución y Cancelación Autónomas:</strong> Mediante proveedores de tarjetas virtuales programables (como Privacy.com, Revolut API o Wallester), el agente no solo "detecta" la suscripción, sino que puede pausar la tarjeta virtual asociada, emitir peticiones de cancelación mediante scripts de browser sintéticos o enviar peticiones directas a las API de bajas de los SaaS (<em class="text-neutral-300 italic font-serif">SaaS Cancellation Endpoints</em>).</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">[ API Bancaria / Webhook ] ──(OAuth2 / JSON)──> [ Agente n8n / Python ]<br>                                                       │<br>                                        (Inferencia LLM / Normalización)<br>                                                       │<br>                                                       ▼<br>                                      [ Motor de Decisión & Reglas ]<br>                                       /             │            \<br>                                      /              │             \<br>                                     ▼               ▼              ▼<br>                           [ Pausa de Tarjeta ] [ Petición API ] [ Notificación ]<br>                           (Revolut / Privacy)  (SaaS Service)   (Webhook/Slack)</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">2. Guía Paso a Paso: Desplegando tu propio Agente de Auditoría Local</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Si no deseas entregar tus credenciales financieras a plataformas de terceros, puedes implementar una canalización privada utilizando <strong class="text-white font-semibold">n8n</strong>, <strong class="text-white font-semibold">PostgreSQL 16</strong> y un <strong class="text-white font-semibold">LLM local o vía API</strong>.</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 1: Infraestructura base con Docker Compose</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">A continuación se muestra el archivo <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">docker-compose.yml</code> para levantar la plataforma de automatización local con soporte para persistencia de datos.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">yaml<br>version: '3.8'</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">services:<br>  postgres:<br>    image: postgres:16-alpine<br>    container_name: fin_agent_db<br>    environment:<br>      POSTGRES_USER: agent_admin<br>      POSTGRES_PASSWORD: SecurePassword2026!<br>      POSTGRES_DB: financial_audit<br>    volumes:<br>      - pgdata:/var/lib/postgresql/data<br>    ports:<br>      - "5432:5432"<br>    restart: always</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">n8n:<br>    image: docker.n8n.io/n8nio/n8n:latest<br>    container_name: fin_agent_n8n<br>    ports:<br>      - "5678:5678"<br>    environment:<br>      - DB_TYPE=postgresdb<br>      - DB_POSTGRESDB_HOST=postgres<br>      - DB_POSTGRESDB_DATABASE=financial_audit<br>      - DB_POSTGRESDB_USER=agent_admin<br>      - DB_POSTGRESDB_PASSWORD=SecurePassword2026!<br>      - N8N_ENCRYPTION_KEY=SuperSecretKey2026Base64==<br>    volumes:<br>      - n8n_data:/home/node/.n8n<br>    depends_on:<br>      - postgres<br>    restart: always</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">volumes:<br>  pgdata:<br>  n8n_data:</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Paso 2: Lógica del agente para detección y acción</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Una vez desplegado el entorno, creamos una función en Python/Node.js que evalúa las transacciones entrantes mediante un webhook bancario. La siguiente función procesa la transacción, detecta patrones recurrentes y decide la acción:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">python<br>import os<br>import json<br>import requests</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">def analyze_transaction(transaction_payload):<br>    """<br>    Recibe la transacción enviada por el Webhook de Open Banking,<br>    evalúa si es un cobro recurrente o período de prueba y determina la acción.<br>    """<br>    llm_api_url = "http://localhost:11434/api/generate" # Ollama local o API externa<br>    <br>    prompt = f"""<br>    Analiza la siguiente transacción financiera y responde EXCLUSIVAMENTE en formato JSON:<br>    Transacción: {json.dumps(transaction_payload)}<br>    <br>    Campos requeridos:<br>    - is_recurring (boolean)<br>    - provider_name (string)<br>    - action_recommended (ALLOW | WARN | BLOCK)<br>    - reason (string)<br>    <br>    Reglas: Si es un período de prueba finalizado o duplicado evidente, asigna BLOCK.<br>    """<br>    <br>    response = requests.post(llm_api_url, json={<br>        "model": "qwen2.5-coder:14b",<br>        "prompt": prompt,<br>        "stream": False,<br>        "format": "json"<br>    })<br>    <br>    result = json.loads(response.json()["response"])<br>    <br>    # Ejecución de la acción en función del análisis<br>    if result.get("action_recommended") == "BLOCK":<br>        freeze_virtual_card(transaction_payload.get("card_id"))<br>        <br>    return result</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">def freeze_virtual_card(card_id):<br>    # Petición a la API del proveedor de tarjeta virtual (ej. Revolut/Privacy)<br>    print(f"[ACCION AUTÓNOMA] Tarjeta {card_id} congelada inmediatamente.")</p>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Ejemplo de carga útil recibida</h2>
+sample_webhook = {
+    "transaction_id": "tx_998231",
+    "card_id": "card_v_88321",
+    "amount": 29.99,
+    "currency": "EUR",
+    "merchant": "AWS EMEA SEATTLE WA",
+    "date": "2026-03-28T04:12:00Z"
+}
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Ejecución</h2>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">analyze_transaction(sample_webhook)</h2>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">3. Comparativa de Plataformas Fintech de 2026</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para usuarios que prefieren soluciones comerciales listas para usar, el mercado de gestión inteligente de gastos ha evolucionado hacia la integración directa con tarjetas virtuales y agentes de negociación.</p>
+
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm">
+<table class="w-full text-left border-collapse text-[13.5px]">
+<thead><tr class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<th class="px-5 py-3 font-semibold">Plataforma</th>
+<th class="px-5 py-3 font-semibold">Enfoque Principal</th>
+<th class="px-5 py-3 font-semibold">Mecanismo de Acción</th>
+<th class="px-5 py-3 font-semibold">Nivel de Autonomía</th>
+</tr></thead><tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Ramp (SaaS Stack 2026)</strong></td>
+<td class="px-5 py-3 leading-relaxed">Empresas y Equipos IT</td>
+<td class="px-5 py-3 leading-relaxed">API REST directa + Tarjetas asociadas a SaaS</td>
+<td class="px-5 py-3 leading-relaxed">Total (Cancela e impone límites por API)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Snoop 3.0</strong></td>
+<td class="px-5 py-3 leading-relaxed">Consumo Personal / Freelance</td>
+<td class="px-5 py-3 leading-relaxed">PSD3 / Open Banking 3.0</td>
+<td class="px-5 py-3 leading-relaxed">Supervisado (Requiere aprobación final)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Trim AI</strong></td>
+<td class="px-5 py-3 leading-relaxed">Negociación de Tarifas</td>
+<td class="px-5 py-3 leading-relaxed">Scripts interactivos y correos automáticos</td>
+<td class="px-5 py-3 leading-relaxed">Parcial (Renegocia planes automáticamente)</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed"><strong class="text-white font-semibold">Maybe (Self-Hosted + AI)</strong></td>
+<td class="px-5 py-3 leading-relaxed">Control Privado / Open Source</td>
+<td class="px-5 py-3 leading-relaxed">Conexión local + LLM propio</td>
+<td class="px-5 py-3 leading-relaxed">Configurable por código o n8n</td>
+</tr>
+</tbody></table></div>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Análisis de las plataformas</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">*   <strong class="text-white font-semibold">Ramp:</strong> Es el estándar de industria para control de gastos corporativos. Permite generar tarjetas de crédito virtuales de un solo uso vinculadas a un proveedor específico (por ejemplo, "Tarjeta exclusiva para Figma"). Si el proveedor sube el precio unilateralmente, la tarjeta rechaza el pago automáticamente.<br>*   <strong class="text-white font-semibold">Snoop 3.0:</strong> Enfocada en el mercado europeo e hispanohablante. Su motor de analítica predice cobros futuros basándose en calendarios de facturación y envía alertas inmediatas si detecta dos servicios que ofrecen la misma funcionalidad (ejemplo: Spotify y Apple Music activos a la vez).<br>*   <strong class="text-white font-semibold">Trim AI:</strong> Su diferencial radica en que no solo detecta la suscripción, sino que interactúa mediante agentes de chat con la atención al cliente de proveedores de telecomunicaciones o SaaS para aplicar descuentos de retención.<br>*   <strong class="text-white font-semibold">Maybe (AI Edition):</strong> La alternativa de código abierto preferida por ingenieros. Mantiene la base de datos de extractos en tu propio servidor y procesa la inferencia sin enviar datos bancarios a terceros.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">4. Matriz de Permisos, Privacidad y Límites de Delegación</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Dar control a un agente sobre tus activos financieros implica riesgos claros: falsos positivos que cancelen servicios críticos (como el registro de un dominio en uso o la base de datos de producción) o fuga de datos sensibles.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para mitigar estos riesgos, es imprescindible aplicar el <strong class="text-white font-semibold">Principio de Mínimo Privilegio</strong> a la hora de configurar OAuth2 scopes y permisos API.</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">┌─────────────────────────────────────────┐<br>                    │    PERMISOS FINANCIEROS DEL AGENTE     │<br>                    └─────────────────────────────────────────┘<br>                                         │<br>                    ┌────────────────────┴────────────────────┐<br>                    │                                         │<br>                    ▼                                         ▼<br>         [ PERMISOS PERMITIDOS ]                   [ PERMISOS DENEGADOS ]<br>    ┌───────────────────────────────┐         ┌───────────────────────────────┐<br>    │ • Read-only en transacciones  │         │ • Transferencias salientes    │<br>    │ • Lectura de Webhooks (PSD3)  │         │ • Acceso a credenciales master│<br>    │ • Congelar tarjeta virtual    │         │ • Auto-cierre de cuentas      │<br>    │ • Crear alertas en Slack      │         │ • Firma de contratos nuevos   │<br>    └───────────────────────────────┘         └───────────────────────────────┘</p>
+
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Reglas clave para la delegación segura</h3>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Aislamiento de Pagos mediante Tarjetas Virtuales:</strong> Nunca conectes la cuenta bancaria principal ni la tarjeta de débito física a suscripciones en línea. Utiliza siempre un intermediario programable. El agente solo debe tener permisos para modificar el límite o pausar la <em class="text-neutral-300 italic font-serif">tarjeta virtual específica</em> asignada a dicho servicio.<br>2. <strong class="text-white font-semibold">Listas Blancas Explicitas (Whitelist de Infraestructura):</strong> Servicios críticos (AWS, Cloudflare, GitHub, proveedores de correo) deben ser marcados con la etiqueta <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">unmodifiable</code> en la base de datos del agente. La IA nunca debe poder revocar el pago de estos proveedores sin una autenticación de dos factores (2FA) humana.<br>3. <strong class="text-white font-semibold">Validación Human-in-the-loop (HITL) para Cancelaciones:</strong> Implementa una confirmación interactiva en tu canal de comunicación (Slack, Telegram o Discord). El agente identifica el gasto duplicado y genera un botón interactivo: <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">[Aprobar Cancelación]</code> / <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">[Ignorar]</code>.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Hoja de Ruta para Optimizar tu Stack Financiero</h2>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Si deseas automatizar la auditoría de tu stack digital sin comprometer la seguridad de tu operativa, sigue este orden de implementación:</p>
+
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">1. <strong class="text-white font-semibold">Paso 1: Migración a Tarjetas Virtuales Modulares.</strong> Desvincula tus tarjetas físicas de todos los proveedores SaaS. Emite una tarjeta virtual única (con límite mensual estricto) para cada servicio recurrente.<br>2. <strong class="text-white font-semibold">Paso 2: Centralización de Eventos (Open Banking).</strong> Configura un webhook utilizando una pasarela compatible con PSD3/Open Banking 3.0 para recibir notificaciones instantáneas de cada cobro efectuado.<br>3. <strong class="text-white font-semibold">Paso 3: Despliegue del Motor de Reglas e Inferencia.</strong> Monta la instancia de n8n o script local expuesto al webhook. Define el prompt y las reglas lógicas para detectar cobros fantasma o incrementos inesperados de precio.<br>4. <strong class="text-white font-semibold">Paso 4: Implementación de la Capa de Notificación Interactiva.</strong> Configura un bot de Slack o Telegram que te solicite aprobación de un solo clic antes de realizar cualquier congelación o cancelación definitiva.</p>
+
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+
+<div class="mt-12 pt-4 border-t border-neutral-900 text-[10.5px] text-neutral-600 font-mono italic tracking-tight">Disclosure:</div> This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*
+            </article>
+
+            <!-- Google AdSense Bottom Slot -->
+            <div class="my-12 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Editorial Ingestion Box for LLMs -->
+            <div class="mt-12 p-5 rounded-sm editorial-box border border-neutral-800 text-xs font-mono text-neutral-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-white font-bold">λ INTEROPERABILIDAD PARA MODELOS DE LENGUAJE</span>
+                        <p class="mt-1 text-neutral-400">Texto plano indexable sin marcado HTML para ChatGPT, Claude y Perplexity.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.md', 'URL copiada')" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-colors cursor-pointer">
+                            Copiar URL .md
+                        </button>
+                        <a href="https://jorgebd21.github.io/post/draft_passed_20260901_093100_agentes_de_ia_para_auditora_de_suscripc.md" target="_blank" class="px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-sm transition-colors">
+                            Ver .md
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="border-t-2 border-neutral-800 bg-[#07080B]/90 backdrop-blur-md mt-20 py-12 text-neutral-500 text-xs font-mono relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <p class="text-white font-serif text-base font-bold tracking-wide uppercase">SYSARCH • HOMELAB JOURNAL</p>
+                <p class="text-neutral-500 text-xs mt-1">Investigación en Sistemas, Redes Privadas e IA • Dirigido por Jorge Baeza</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" class="hover:text-white transition-colors">/llms.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" class="hover:text-white transition-colors">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/sitemap.xml" class="hover:text-white transition-colors">Sitemap</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" class="hover:text-white transition-colors">Feed RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Script -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const m = document.getElementById('toastMsg');
+            m.innerText = msg;
+            t.classList.remove('hidden', 'toast-animate');
+            void t.offsetWidth;
+            t.classList.add('toast-animate');
+            setTimeout(() => { t.classList.add('hidden'); }, 2200);
+        }
+
+        function copyCode(btn) {
+            const card = btn.closest('.code-block');
+            const code = card.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const span = btn.querySelector('span');
+                const orig = span.innerText;
+                span.innerText = 'Copiado';
+                btn.classList.add('text-white', 'bg-neutral-700');
+                showToast('Bloque copiado');
+                setTimeout(() => {
+                    span.innerText = orig;
+                    btn.classList.remove('text-white', 'bg-neutral-700');
+                }, 2000);
+            });
+        }
+
+        function copyToClipboard(text, customMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(customMsg || 'Copiado al portapapeles');
+            });
+        }
+
+        // Shortcut: '/' or 'Cmd+K' to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.focus();
+                    search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
