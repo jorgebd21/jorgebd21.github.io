@@ -1,0 +1,9 @@
+# SYSARCH | Publicación Técnica de Arquitectura, Homelab & IA 2026
+
+> Investigación en Arquitectura de Sistemas, Redes Zero-Trust, DevOps, Servidores de IA Locales y Soberanía Tecnológica.
+
+Este archivo proporciona un índice estructurado de artículos técnicos para agentes de IA y LLMs.
+
+## Artículos Disponibles
+
+- [Mastering Docker Network Drivers: Bridge, Host, Overlay and Macvlan in Production](https://jorgebd21.github.io/post/mastering-docker-network-drivers.md): Guía exhaustiva para elegir el driver de red correcto en contenedores de producción. (Categoría: Infraestructura & DevOps | 1200 palabras | Publicado: 2026-08-31)

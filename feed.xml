@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SYSARCH | Publicación Técnica de Arquitectura, Homelab & IA 2026</title>
+    <link>https://jorgebd21.github.io</link>
+    <description>Investigación en Arquitectura de Sistemas, Redes Zero-Trust, DevOps, Servidores de IA Locales y Soberanía Tecnológica.</description>
+    <language>es</language>
+    <atom:link href="https://jorgebd21.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Mastering Docker Network Drivers: Bridge, Host, Overlay and Macvlan in Production</title>
+      <link>https://jorgebd21.github.io/post/mastering-docker-network-drivers.html</link>
+      <description>Guía exhaustiva para elegir el driver de red correcto en contenedores de producción.</description>
+      <category>Infraestructura &amp; DevOps</category>
+      <guid>https://jorgebd21.github.io/post/mastering-docker-network-drivers.html</guid>
+    </item>
+  </channel>
+</rss>
