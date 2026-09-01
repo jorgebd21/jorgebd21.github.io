@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini PCs con NPU en 2026: Tu Homelab de IA Local y Domótica Sin Suscripciones — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026</title>
+    <meta name="description" content="Un clúster de APUs modernas consume entre 15W y 35W en reposo, mientras que la factura acumulada de suscripciones como OpenAI Plus, Claude Pro y almacenamiento en la nube para domótica supera fácilmente los 600 euros anuales por usuario. En...">
+    
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mini PCs con NPU en 2026: Tu Homelab de IA Local y Domótica Sin Suscripciones — SYSARCH | Publicación Técnica de Arquitectura, Homelab &amp; IA 2026">
+    <meta property="og:description" content="Un clúster de APUs modernas consume entre 15W y 35W en reposo, mientras que la factura acumulada de suscripciones como OpenAI Plus, Claude Pro y almacenamiento en la nube para domótica supera fácilmente los 600 euros anuales por usuario. En...">
+    <meta property="og:url" content="https://jorgebd21.github.io">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect Google Fonts for Editorial Press (Newsreader + Lora + JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Newsreader"', 'Georgia', 'serif'],
+                        body: ['"Lora"', 'Charter', 'Georgia', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Editorial Typography & Universal Background Styles -->
+    <style>
+        body {
+            background-color: #0A0B0E;
+            color: #D4D4D8;
+            font-family: 'Lora', Charter, Georgia, serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .font-serif { font-family: 'Newsreader', Georgia, serif; }
+        .font-body { font-family: 'Lora', Charter, Georgia, serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Universal Editorial Press Background Across ALL Pages */
+        .editorial-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../assets/editorial_bg.jpg'), url('/assets/editorial_bg.jpg'), url('https://jorgebd21.github.io/assets/editorial_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.16;
+            filter: contrast(135%) brightness(105%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .editorial-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(10, 11, 14, 0.35) 0%, rgba(10, 11, 14, 0.80) 65%, #0A0B0E 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Classic Editorial Drop Cap */
+        .editorial-lead::first-letter {
+            font-family: 'Newsreader', Georgia, serif;
+            float: left;
+            font-size: 3.85em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Subtle borders and paper feel */
+        .editorial-box {
+            background-color: rgba(15, 16, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .editorial-divider {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Clean Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0B0E; }
+        ::-webkit-scrollbar-thumb { background: #272A36; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4354; }
+
+        /* Toast animation */
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .toast-animate { animation: toastFade 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+
+    <!-- Google AdSense Official Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9111135660504315" crossorigin="anonymous"></script>
+
+    <!-- LLM Autodiscovery & RSS -->
+    <link rel="alternate" type="text/plain" href="https://jorgebd21.github.io/llms.txt" title="LLM Context Index">
+    <link rel="alternate" type="application/rss+xml" href="https://jorgebd21.github.io/feed.xml" title="RSS Feed">
+    
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Mini PCs con NPU en 2026: Tu Homelab de IA Local y Domótica Sin Suscripciones",
+            "description": "Un clúster de APUs modernas consume entre 15W y 35W en reposo, mientras que la factura acumulada de suscripciones como OpenAI Plus, Claude Pro y almacenamiento en la nube para domótica supera fácilmente los 600 euros anuales por usuario. En...",
+            "author": { "@type": "Person", "name": "Jorge Baeza" },
+            "publisher": { "@type": "Organization", "name": "SYSARCH • HOMELAB JOURNAL" },
+            "datePublished": "2026-09-01",
+            "dateModified": "2026-09-01",
+            "mainEntityOfPage": "https://jorgebd21.github.io/post/draft_passed_20260901_112829_mini_pcs_con_npu_en_2026_tu_homelab_de_i.html",
+            "articleSection": "Fintech & Ahorro",
+            "proficiencyLevel": "Expert",
+            "dependencies": "Linux, Docker Compose, Shell, Python",
+            "wordCount": 1818,
+            "inLanguage": "es"
+        }
+        </script>
+        
+</head>
+<body class="bg-[#0A0B0E] text-zinc-300 min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+
+    <!-- Universal Editorial Background Layers -->
+    <div class="editorial-backdrop"></div>
+    <div class="editorial-vignette"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="px-4 py-2.5 rounded-sm editorial-box text-white font-mono text-xs shadow-2xl flex items-center gap-2 border-neutral-700">
+            <span class="text-neutral-400">✓</span>
+            <span id="toastMsg">Copiado al portapapeles</span>
+        </div>
+    </div>
+
+    <!-- Editorial Top Utility Bar -->
+    <div class="border-b border-neutral-800/80 bg-[#08080B]/90 backdrop-blur-md text-neutral-400 font-mono text-[11px] py-1.5 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-neutral-400 font-semibold">SYSARCH LABS</span>
+                <span>•</span>
+                <span class="text-neutral-400">EDICIÓN 2026 // VOL. IV</span>
+                <span>•</span>
+                <span class="text-neutral-500 hidden md:inline">HOMELAB & SISTEMAS AUTÓNOMOS</span>
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1" title="Índice para Modelos de Lenguaje">
+                    <span>λ</span> <span>/llms.txt</span>
+                </a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" target="_blank" class="hover:text-white transition-colors" title="Corpus RAG Completo">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" target="_blank" class="hover:text-white transition-colors">RSS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publication Masthead / Header -->
+    <header class="border-b border-neutral-800 bg-[#0A0B0E]/80 backdrop-blur-md pt-8 pb-6 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <a href="https://jorgebd21.github.io/" class="group">
+                        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.06em] text-white group-hover:text-neutral-300 transition-colors uppercase">
+                            SYSARCH • HOMELAB JOURNAL
+                        </h1>
+                    </a>
+                    <p class="font-mono text-xs uppercase tracking-widest text-neutral-400 mt-1">
+                        Publicación Técnica de Arquitectura de Sistemas, Redes Zero-Trust e IA Local
+                    </p>
+                </div>
+
+                <div class="text-right hidden sm:block font-mono text-xs text-neutral-400 border-l border-neutral-800 pl-6">
+                    <p class="text-white font-semibold">COSTE CERO & ZERO-EXPOSURE</p>
+                    <p class="text-neutral-500 text-[11px] mt-0.5">Airgapped GitOps Publishing</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editorial Layout -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+        
+        <div class="max-w-[68ch] mx-auto">
+            <!-- Journal Navigation -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 pb-3 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+                <a href="https://jorgebd21.github.io/" class="hover:text-white flex items-center gap-1.5 transition-colors group">
+                    <span class="group-hover:-translate-x-0.5 transition-transform">←</span> <span>Todas las publicaciones</span>
+                </a>
+                
+                <div class="flex items-center gap-3 self-end sm:self-auto">
+                    <a href="https://jorgebd21.github.io/post/draft_passed_20260901_112829_mini_pcs_con_npu_en_2026_tu_homelab_de_i.md" target="_blank" class="hover:text-white transition-colors" title="Ver formato Markdown puro">
+                        λ .md raw
+                    </a>
+                    <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_112829_mini_pcs_con_npu_en_2026_tu_homelab_de_i.md', 'URL Markdown copiada para IA')" class="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-all cursor-pointer active:scale-95" title="Copiar URL para ChatGPT / Claude">
+                        Copiar para IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Header -->
+            <header class="mb-10 pb-6 border-b-2 border-neutral-800">
+                <div class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-3">
+                    Fintech & Ahorro // ANÁLISIS TÉCNICO
+                </div>
+
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+                    Mini PCs con NPU en 2026: Tu Homelab de IA Local y Domótica Sin Suscripciones
+                </h1>
+
+                
+
+                <div class="mt-6 pt-4 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-neutral-400">
+                    <div>Por <span class="text-white font-semibold">Jorge Baeza</span></div>
+                    <div>01.09.2026 • 9 min de lectura (1,818 palabras)</div>
+                </div>
+            </header>
+
+            <!-- Google AdSense In-Article Slot -->
+            <div class="my-8 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Article Body (with Drop Cap on lead paragraph) -->
+            <article class="prose prose-invert max-w-none text-neutral-200">
+                <p class="editorial-lead text-neutral-200 font-body text-[17.5px] sm:text-[18.5px] leading-[1.85] mb-6">Un clúster de APUs modernas consume entre 15W y 35W en reposo, mientras que la factura acumulada de suscripciones como OpenAI Plus, Claude Pro y almacenamiento en la nube para domótica supera fácilmente los 600 euros anuales por usuario. En 2026, la madurez de los modelos de lenguaje pequeños (SLMs) como Qwen 2.5, Llama 3.2 y Phi-3, sumada a la llegada de procesadores x86 con unidades de procesamiento neuronal (NPU) dedicadas, ha cambiado drásticamente la ecuación financiera de la infraestructura doméstica.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Montar un servidor Homelab ya no requiere reciclar una torre de escritorio ruidosa con una GPU dedicada consumiendo 250W. Los Mini PCs de última generación permiten ejecutar agentes de procesamiento de lenguaje natural, transcripción de voz en tiempo real y automatización del hogar 100% privados, locales y con latencias de respuesta en red local por debajo de los 200 milisegundos.</p>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Arquitectura de Hardware en 2026: NPUs y la Muerte de la GPU Dedicada en Homelabs</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Durante años, ejecutar inferencia de IA en casa requería GPUs Nvidia de la serie RTX debido a la hegemonía de CUDA. Sin embargo, en la arquitectura de silicio de 2026, las NPUs integradas (como AMD XDNA 2 e Intel AI Boost) junto con las iGPUs de alto ancho de memoria (Radeon 780M/890M e Intel Arc) asumen el trabajo de inferencia continua para modelos de hasta 14 mil millones de parámetros (14B) cuantizados.</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La clave no es solo la potencia bruta en TOPS (Tera Operations Per Second), sino la eficiencia por vatio y el soporte en frameworks como ONNX Runtime, OpenVINO y vLLM/Ollama. Mientras que la iGPU destaca en el procesamiento matricial masivo en paralelo (generación de tokens en LLMs), la NPU es idónea para tareas de fondo continuas y de bajo consumo, como la detección de presencia por visión computacional o la escucha activa de palabras de activación (<em>wake words</em>).</p>
+<div class="overflow-x-auto my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm"><table class="w-full text-left border-collapse text-[13.5px]">
+<thead class="border-b border-neutral-800 bg-neutral-900/70 text-white font-mono text-xs uppercase tracking-wider">
+<tr>
+<th class="px-5 py-3 font-semibold">Procesador</th>
+<th class="px-5 py-3 font-semibold">Arquitectura NPU / iGPU</th>
+<th class="px-5 py-3 font-semibold">Consumo (TDP)</th>
+<th class="px-5 py-3 font-semibold">Caso de Uso Ideal</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-800/60 text-neutral-300 font-body">
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">AMD Ryzen 7 8840HS</td>
+<td class="px-5 py-3 leading-relaxed">XDNA (16 TOPS) + Radeon 780M</td>
+<td class="px-5 py-3 leading-relaxed">15W - 30W</td>
+<td class="px-5 py-3 leading-relaxed">Inferencia balanceada LLMs 7B-14B</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Intel Core Ultra 5 125H</td>
+<td class="px-5 py-3 leading-relaxed">AI Boost (11 TOPS) + Arc Graphics</td>
+<td class="px-5 py-3 leading-relaxed">20W - 28W</td>
+<td class="px-5 py-3 leading-relaxed">Pipeline OpenVINO y visión local</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">AMD Ryzen 9 9955HS</td>
+<td class="px-5 py-3 leading-relaxed">XDNA 2 (50 TOPS) + Radeon 890M</td>
+<td class="px-5 py-3 leading-relaxed">28W - 54W</td>
+<td class="px-5 py-3 leading-relaxed">Agentes multitarea y RAG denso</td>
+</tr>
+<tr class="hover:bg-neutral-800/30 transition-colors">
+<td class="px-5 py-3 leading-relaxed">Intel N100 / N305</td>
+<td class="px-5 py-3 leading-relaxed">Sin NPU (Solo Intel UHD)</td>
+<td class="px-5 py-3 leading-relaxed">6W - 15W</td>
+<td class="px-5 py-3 leading-relaxed">Domótica básica (sin LLMs locales)</td>
+</tr>
+</tbody>
+</table></div>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Los chips de clase ultra-económica como el Intel N100 siguen siendo válidos para servicios de red ligeros (Pi-hole, Reverse Proxies, Home Assistant básico), pero quedan obsoletos en el momento en que se introduce inferencia de voz o lenguaje local. Para un Homelab orientado a IA en 2026, el punto dulce se sitúa en las plataformas AMD Ryzen 8000/9000 o Intel Core Ultra de primera y segunda generación.</p>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Dimensionamiento Técnico: El Peligro de Errar en Memoria y Térmicas</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El error más común al seleccionar un Mini PC para IA local es priorizar la frecuencia del procesador por encima de la arquitectura del subsistema de memoria y la disipación térmica del chasis.</p>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">+------------------------------------------------------------------+
+|                      MINI PC CORE ARCHITECTURE                   |
+|                                                                  |
+|  +--------------------+      +--------------------------------+  |
+|  | CPU Core Complex   |      | Dual-Channel DDR5 (5600+ MT/s) |  |
+|  +---------+----------+      +---------------+----------------+  |
+|            |                                 |                   |
+|            v                                 v                   |
+|  +--------------------+             +-----------------+          |
+|  | Shared Memory Bus  |&lt;-----------&gt;| System VRAM Pool|          |
+|  +---------+----------+             +--------+--------+          |
+|            |                                 |                   |
+|            v                                 v                   |
+|  +--------------------+             +-----------------+          |
+|  | NPU / iGPU Accelerator             Unified RAM Allocation     |
+|  +--------------------+             +-----------------+          |
++------------------------------------------------------------------+</code></pre></div>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. El cuello de botella insalvable del ancho de banda de memoria</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">En la inferencia de LLMs, la velocidad de generación de tokens no depende de los TFLOPS del procesador, sino del ancho de banda de la memoria RAM (GB/s). Cuando un modelo de lenguaje está cargado en la VRAM compartida de la iGPU/NPU, cada token generado exige leer la totalidad de los pesos del modelo desde la memoria principal.</p>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Configuración en Monocanal (Single-Channel):</strong> Reduce el ancho de banda a la mitad (~38.4 GB/s en DDR5). La velocidad de generación en un modelo de 7B (Q4_K_M) cae a unos infumables 3 a 5 tokens por segundo.</li>
+<li><strong>Configuración en Doble Canal (Dual-Channel DDR5-5600):</strong> Ofrece hasta ~89.6 GB/s, elevando la velocidad de inferencia a 18-25 tokens por segundo en el mismo modelo.</li>
+<li><strong>Memorias LPDDR5x Soldadas (7500+ MT/s):</strong> Alcanzan anchos de banda superiores a los 120 GB/s. Si compras un Mini PC con memoria soldada, asegúrate de pedir 32 GB o 64 GB desde el primer día, ya que no podrás ampliarla.</li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Térmicas y Throttling en chasis de 0.5 Litros</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La ejecución continua de un agente de IA procesando documentos o transcribiendo audio mantendrá la APU al 100% de carga durante minutos. En chasis extremadamente compactos:</p>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li>El procesador alcanza rápidamente el límite térmico (Tjunction ~95°C) y aplica <em>thermal throttling</em>, reduciendo las frecuencias de reloj hasta un 40%.</li>
+<li>Busca Mini PCs que utilicen disipación por cámara de vapor o ventiladores de gran diámetro con perfiles BIOS configurables en modo “Performance” a 35W o 45W sostenidos.</li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">3. Degradación del almacenamiento NVMe por IOPS en Bases de Datos Vectoriales</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El uso de bases de datos vectoriales (Qdrant, ChromaDB) para sistemas RAG (Retrieval-Augmented Generation) genera escrituras aleatorias constantes de embeddings. Los SSDs de gama baja sin DRAM Cache sufren caídas drásticas de rendimiento bajo estas cargas de trabajo y reducen exponencialmente su vida útil (TBW). Elige unidades NVMe PCIe 4.0 con DRAM integrada y añade disipadores térmicos de cobre pasivos.</p>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Despliegue del Stack Local: Proxmox, Ollama, Open WebUI y Home Assistant</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">La arquitectura recomendada consiste en utilizar <strong>Proxmox VE 8</strong> como hipervisor base. Esto permite aislar los servicios de domótica crítica en una máquina virtual dedicada, mientras que los servicios de IA se ejecutan en un contenedor LXC o una VM con <em>passthrough</em> directo de los nodos de renderizado de la iGPU/NPU (<code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">/dev/dri/renderD128</code> y accesos a controladores de NPU).</p>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">A continuación se detalla una pila de producción utilizando <strong>Docker Compose v2</strong> sobre Debian 12 / Ubuntu Server 24.04 LTS dentro del entorno virtualizado:</p>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_engine
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri  # Passthrough de iGPU/NPU para aceleración hardware
+    volumes:
+      - ./ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_NUM_PARALLEL=4
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open_webui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=cambia_este_hash_super_seguro_2026
+    volumes:
+      - ./webui_data:/app/backend/data
+    depends_on:
+      - ollama
+
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./ha_config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+
+  whisper-asr:
+    image: fedelman/faster-whisper-server:latest-cpu
+    container_name: whisper_service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_SIZE=medium.en
+      - DEVICE=cpu
+      - COMPUTETYPE=int8</code></pre></div>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">Configuración del Passthrough de Aceleración en Linux</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para verificar que el sistema operativo reconoce los nodos de aceleración gráfica y NPU dentro del contenedor o servidor host, ejecuta:</p>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class=""></code></pre></div>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Verificar la presencia de dispositivos de aceleración gráfica e inferencia</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">ls -la /dev/dri</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Salida esperada:</h2>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">drwxr-xr-x  2 root root        80 Jan 15 10:00 .</h2>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">crw-rw----  1 root render 226,   0 Jan 15 10:00 card0</h2>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">crw-rw----  1 root render 226, 128 Jan 15 10:00 renderD128</h2>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Comprobar el uso en tiempo real de la GPU/NPU AMD</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">sudo amdgpu_top</p>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Para procesadores Intel Core Ultra</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">intel_gpu_top</p>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Casos de Uso del Día a Día: Agentes Locales y Domótica Sin Latencia</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Al eliminar las llamadas a APIs externas, el Homelab procesa flujos de información sensibles dentro de la red de área local (LAN), manteniendo privacidad absoluta y velocidad constante incluso si la conexión a Internet cae.</p>
+<div class="code-block my-8 rounded-sm border border-neutral-800 bg-[#0C0D11]/90 backdrop-blur-sm overflow-hidden"><div class="flex items-center justify-between px-4 py-2 bg-[#12141A]/90 border-b border-neutral-800/80 text-xs font-mono text-neutral-400"><div class="flex items-center gap-2"><span class="text-neutral-500 font-bold">λ</span><span class="text-neutral-300 font-semibold text-[11px] tracking-wider">TERMINAL</span></div><button class="px-2 py-0.5 rounded-sm bg-neutral-800 hover:bg-neutral-700 hover:text-white text-neutral-300 transition-colors text-[11px] font-mono cursor-pointer" onclick="copyCode(this)"><span>Copiar</span></button></div><pre class="p-4 sm:p-5 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-neutral-200"><code class="">+-------------------------------------------------------------------+
+|                     LOCAL AUTOMATION PIPELINE                     |
+|                                                                   |
+|  +--------------------+       +--------------------------------+  |
+|  | Local Audio Input  | ----&gt; | Faster-Whisper (STT Engine)    |  |
+|  +--------------------+       +---------------+----------------+  |
+|                                               |                   |
+|                                               v                   |
+|  +--------------------+       +--------------------------------+  |
+|  | Home Assistant     | &lt;---- | Local LLM (Intent Parsing)     |  |
+|  | Real-time Exec     |       | (Qwen 2.5 7B / Llama 3.2 3B)   |  |
+|  +--------------------+       +--------------------------------+  |
++-------------------------------------------------------------------+</code></pre></div>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">1. Transcripción de Reuniones y Resumen de Documentos Confidenciales</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Utilizando la combinación de <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">faster-whisper</code> procesado mediante las extensiones de la NPU y un modelo como <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Qwen2.5-Coder-7B</code> o <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Llama-3.2-3B-Instruct</code>:</p>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Flujo:</strong> Graba notas de voz o reuniones de trabajo desde tu teléfono mediante una automatización con la app local. El archivo de audio entra en una carpeta monitorizada por un contenedor <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">n8n</code> ejecutable en el Mini PC.</li>
+<li><strong>Procesamiento:</strong> Whisper convierte el audio a texto en cuestión de segundos (aprovechando la aceleración vectorial). Seguidamente, Ollama procesa la plantilla de resumen, extracta los puntos de acción y los envía directamente a tu gestor de tareas o base de datos local (Vault de Obsidian / PostgreSQL).</li>
+<li><strong>Ventaja:</strong> Ningún dato empresarial o conversación privada sale de tu red local.</li>
+</ul>
+<h3 class="font-serif text-2xl font-bold text-white mt-10 mb-3 tracking-normal border-l-2 border-neutral-400 pl-3.5">2. Domótica con Procesamiento de Intenciones por Lenguaje Natural</h3>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">El procesamiento clásico de voz en domótica mediante soluciones basadas en la nube sufre latencias inherentes (1.5 a 3 segundos) y problemas de privacidad. Integrando Home Assistant con la extensión <strong>Local LLM Conversation</strong>:</p>
+<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li>Puedes emitir comandos ambiguos o complejos: <em>“Hace fresco en la sala y voy a empezar a ver una película”</em>.</li>
+<li>El modelo LLM local (ejecutado en la NPU/iGPU en &lt; 150ms) analiza la intención, determina que debe subir la temperatura del termostato del salón a 21°C, bajar las persianas al 80% y atenuar la iluminación de la TV.</li>
+<li>La acción se ejecuta instantáneamente mediante protocolos locales como Zigbee (vía Zigbee2MQTT) o Matter sin tocar servidores de terceros.</li>
+</ul>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-14 mb-4 tracking-normal pb-2 border-b border-neutral-800">Recomendaciones Prácticas y Siguientes Pasos</h2>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">Para garantizar el éxito en el montaje de tu Homelab de IA local durante este año, sigue esta lista de verificación técnica antes de realizar cualquier compra o despliegue:</p>
+<ol class="my-6 space-y-2.5 list-decimal list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Selección estricta de hardware:</strong> Opta por Mini PCs equipados con procesadores <strong>AMD Ryzen 7 8840HS / 9850HS</strong> o <strong>Intel Core Ultra 5/7</strong>. Evita procesadores de generaciones anteriores a 2024 si tu objetivo principal incluye ejecutar LLMs locales de manera fluida.</li>
+<li><strong>Dimensionamiento de RAM:</strong> Instala un kit de <strong>32 GB o 64 GB de memoria RAM DDR5 a 5600 MT/s en configuración de doble canal</strong>. Asegúrate en el BIOS de asignar al menos 8 GB o 16 GB de memoria del sistema como VRAM compartida (<em>UMA Frame Buffer Size</em>) para la iGPU/NPU.</li>
+<li><strong>Almacenamiento térmicamente protegido:</strong> Utiliza SSDs NVMe M.2 PCIe 4.0 con memorias TLC (evita QLC para bases de datos vectoriales) y asegúrate de que el chasis incluya un disipador de aluminio o un pequeño ventilador dedicado a las unidades M.2.</li>
+<li><strong>Estrategia de modelos:</strong> No intentes ejecutar modelos de 70B parámetros. La excelencia en Homelabs locales en 2026 se obtiene combinando modelos especializados pequeños:<ul class="my-6 space-y-2.5 list-disc list-inside text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-relaxed">
+<li><strong>Whisper Medium/Small</strong> para transcripción de voz.</li>
+<li><strong>Llama 3.2 (3B)</strong> o <strong>Phi-3.5</strong> para tareas de control domótico ultra-rápidas.</li>
+<li><strong>Qwen 2.5 (7B o 14B)</strong> cuantizado en <code class="bg-neutral-800/80 text-neutral-200 border border-neutral-700/60 px-1.5 py-0.5 rounded-sm font-mono text-[13px]">Q4_K_M</code> para tareas complejas de RAG, programación y generación de texto.</li>
+</ul>
+</li>
+<li><strong>Mantenimiento:</strong> Configura copias de seguridad automatizadas de tus volúmenes de Docker y estados de Home Assistant utilizando herramientas como <strong>BorgBackup</strong> o <strong>Kopia</strong> hacia un almacenamiento masivo local (NAS).</li>
+</ol>
+<div class="flex items-center justify-center my-12"><span class="text-neutral-600 font-mono text-sm tracking-[0.5em]">◆ ◆ ◆</span></div>
+<div class="mt-12 pt-4 border-t border-neutral-900 text-[10.5px] text-neutral-600 font-mono italic tracking-tight">Disclosure:</div>
+<p class="text-neutral-300 font-body text-[16.5px] sm:text-[17.5px] leading-[1.85] mb-6">This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*</p>
+            </article>
+
+            <!-- Google AdSense Bottom Slot -->
+            <div class="my-12 p-3 editorial-box rounded-sm text-center min-h-[90px] overflow-hidden">
+                <div class="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mb-1">[PATROCINIO // PUBLICIDAD]</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9111135660504315"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Editorial Ingestion Box for LLMs -->
+            <div class="mt-12 p-5 rounded-sm editorial-box border border-neutral-800 text-xs font-mono text-neutral-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-white font-bold">λ INTEROPERABILIDAD PARA MODELOS DE LENGUAJE</span>
+                        <p class="mt-1 text-neutral-400">Texto plano indexable sin marcado HTML para ChatGPT, Claude y Perplexity.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyToClipboard('https://jorgebd21.github.io/post/draft_passed_20260901_112829_mini_pcs_con_npu_en_2026_tu_homelab_de_i.md', 'URL copiada')" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-sm transition-colors cursor-pointer">
+                            Copiar URL .md
+                        </button>
+                        <a href="https://jorgebd21.github.io/post/draft_passed_20260901_112829_mini_pcs_con_npu_en_2026_tu_homelab_de_i.md" target="_blank" class="px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-sm transition-colors">
+                            Ver .md
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="border-t-2 border-neutral-800 bg-[#07080B]/90 backdrop-blur-md mt-20 py-12 text-neutral-500 text-xs font-mono relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <p class="text-white font-serif text-base font-bold tracking-wide uppercase">SYSARCH • HOMELAB JOURNAL</p>
+                <p class="text-neutral-500 text-xs mt-1">Investigación en Sistemas, Redes Privadas e IA • Dirigido por Jorge Baeza</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-neutral-400">
+                <a href="https://jorgebd21.github.io/llms.txt" class="hover:text-white transition-colors">/llms.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/llms-full.txt" class="hover:text-white transition-colors">/llms-full.txt</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/sitemap.xml" class="hover:text-white transition-colors">Sitemap</a>
+                <span>•</span>
+                <a href="https://jorgebd21.github.io/feed.xml" class="hover:text-white transition-colors">Feed RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Interactive Script -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const m = document.getElementById('toastMsg');
+            m.innerText = msg;
+            t.classList.remove('hidden', 'toast-animate');
+            void t.offsetWidth;
+            t.classList.add('toast-animate');
+            setTimeout(() => { t.classList.add('hidden'); }, 2200);
+        }
+
+        function copyCode(btn) {
+            const card = btn.closest('.code-block');
+            const code = card.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const span = btn.querySelector('span');
+                const orig = span.innerText;
+                span.innerText = 'Copiado';
+                btn.classList.add('text-white', 'bg-neutral-700');
+                showToast('Bloque copiado');
+                setTimeout(() => {
+                    span.innerText = orig;
+                    btn.classList.remove('text-white', 'bg-neutral-700');
+                }, 2000);
+            });
+        }
+
+        function copyToClipboard(text, customMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(customMsg || 'Copiado al portapapeles');
+            });
+        }
+
+        // Shortcut: '/' or 'Cmd+K' to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.focus();
+                    search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
