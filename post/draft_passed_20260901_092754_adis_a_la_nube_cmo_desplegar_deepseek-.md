@@ -1,18 +1,3 @@
-# SYSARCH | Publicación Técnica de Arquitectura, Homelab & IA 2026 - CORPUS TÉCNICO COMPLETO PARA LLMs
-# Generado: 2026-09-01 09:27:54
-# Total Artículos: 1
-# URL Base: https://jorgebd21.github.io
-
-===============================================================================
-
-DOCUMENTO 1/1
-Título: Adiós a la Nube: Cómo Desplegar DeepSeek-V4 y Agentes Locales para Eliminar tus Suscripciones de IA
-Categoría: Inteligencia Artificial
-URL Canónica: https://jorgebd21.github.io/post/draft_passed_20260901_092754_adis_a_la_nube_cmo_desplegar_deepseek-.html
-URL Markdown: https://jorgebd21.github.io/post/draft_passed_20260901_092754_adis_a_la_nube_cmo_desplegar_deepseek-.md
-Fecha: 2026-09-01
-Palabras: 1593
-
 # Adiós a la Nube: Cómo Desplegar DeepSeek-V4 y Agentes Locales para Eliminar tus Suscripciones de IA
 
 El mes pasado cancelé la última suscripción activa a servicios de LLM comercial en mi equipo de infraestructura. Entre las licencias empresariales de ChatGPT, Claude Pro y el gasto recurrente de API keys para procesar workflows internos, la factura superaba los 420 dólares mensuales por ingeniero. Multiplicado por diez personas, el coste superaba los 50.000 dólares anuales por interactuar con una API cuya latencia depende de servidores externos y cuyas políticas de privacidad obligan a firmar adendas interminables de protección de datos.
@@ -193,7 +178,3 @@ Para consolidar tu migración desde servicios cloud hacia una infraestructura de
 ---
 
 > *Disclosure: This article was researched and structured with the assistance of advanced AI language models, followed by automated technical validation.*
-
-
--------------------------------------------------------------------------------
-
